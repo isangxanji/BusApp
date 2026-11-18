@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#F2EEE7</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="primary">#292B2F</color>
+    <color name="primary_dark">#25272B</color>
+    <color name="secondary">#55575C</color>
+    <color name="accent">#D99A27</color>
+    <color name="accent_light">#FFF1D6</color>
+    <color name="text_primary">#25272B</color>
+    <color name="text_secondary">#77736B</color>
+    <color name="border">#E4DED3</color>
+
+    <color name="status_available">#218653</color>
+    <color name="status_en_route">#D99A27</color>
+    <color name="status_departed">#77736B</color>
+    <color name="status_unavailable">#C74343</color>
+</resources>
