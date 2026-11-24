@@ -1,28 +1,11 @@
-
 <resources xmlns:tools="http://schemas.android.com/tools">
-
-    <style name="Base.Theme.BusApp" parent="Theme.Material3.Light.NoActionBar">
-
+    <style name="Theme.PabamaApp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorOnPrimary">@color/surface</item>
-
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/accent</item>
-        <item name="colorOnSecondary">@color/primary_dark</item>
-
-        <item name="android:colorBackground">@color/background</item>
-        <item name="colorSurface">@color/surface</item>
-        <item name="colorOnSurface">@color/text_primary</item>
-
-        <item name="colorOutline">@color/border</item>
-
-        <item name="android:statusBarColor">@color/background</item>
-        <item name="android:navigationBarColor">@color/background</item>
-
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
-
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:windowBackground">@color/background</item>
     </style>
-
-    <style name="Theme.BusApp" parent="Base.Theme.BusApp" />
-
+    <style name="Theme.BusApp" parent="Theme.PabamaApp" />
 </resources>

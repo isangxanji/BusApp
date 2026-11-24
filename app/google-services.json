@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "196785877768",
+    "project_id": "bus-malakas",
+    "storage_bucket": "bus-malakas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196785877768:android:bc9a58e0567c201750f2bd",
+        "android_client_info": {
+          "package_name": "com.pabama.businfo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQcTq3m7PjexA3JUvho9jQC-IEH2mnLJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

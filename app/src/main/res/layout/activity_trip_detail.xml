@@ -17,6 +17,7 @@
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:text="←  Back"
             android:textColor="@color/accent"
             android:textSize="15sp"
@@ -59,26 +60,29 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/txtDetailBusPlate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PXR 4412"
+                android:text="Loading..."
                 android:textColor="@color/text_primary"
                 android:textSize="25sp"
                 android:textStyle="bold"
                 android:layout_marginTop="12dp" />
 
             <TextView
+                android:id="@+id/txtDetailBusType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Regular Bus"
+                android:text="-"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 android:layout_marginTop="4dp" />
 
             <TextView
+                android:id="@+id/txtDetailBusStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AVAILABLE"
+                android:text="CHECKING"
                 android:textColor="@color/status_available"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -105,9 +109,10 @@
             android:background="@drawable/bg_card">
 
             <TextView
+                android:id="@+id/txtDetailDestination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Baguio City"
+                android:text="Loading destination..."
                 android:textColor="@color/text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -134,54 +139,12 @@
             android:layout_marginBottom="12dp" />
 
         <LinearLayout
+            android:id="@+id/containerRouteWaypoints"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="18dp"
-            android:background="@drawable/bg_card">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="●  Terminal"
-                android:textColor="@color/text_primary"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="│"
-                android:textColor="@color/accent"
-                android:paddingStart="5dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:textSize="17sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="●  TPL Ex"
-                android:textColor="@color/text_primary"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="│"
-                android:textColor="@color/accent"
-                android:paddingStart="5dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:textSize="17sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="●  Baguio City"
-                android:textColor="@color/text_primary"
-                android:textSize="15sp" />
-
-        </LinearLayout>
+            android:background="@drawable/bg_card" />
 
     </LinearLayout>
 

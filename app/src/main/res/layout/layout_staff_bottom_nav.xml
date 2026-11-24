@@ -15,9 +15,8 @@
         android:gravity="center"
         android:padding="8dp"
         android:text="⌂&#10;Dashboard"
-        android:textColor="@color/accent"
-        android:textSize="11sp"
-        android:textStyle="bold" />
+        android:textColor="@color/text_secondary"
+        android:textSize="11sp" />
 
     <TextView
         android:id="@+id/btnStaffRecord"

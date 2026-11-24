@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="About TerminalLink"
+                android:text="About Mindanao Bus Info"
                 android:textColor="@color/text_primary"
                 android:textSize="26sp"
                 android:textStyle="bold" />
@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TerminalLink"
+                    android:text="Mindanao Bus Info"
                     android:textColor="@color/primary"
                     android:textSize="28sp"
                     android:textStyle="bold" />
@@ -88,7 +88,7 @@
                 android:layout_marginTop="10dp"
                 android:padding="16dp"
                 android:background="@drawable/bg_card"
-                android:text="TerminalLink helps passengers access bus availability, destinations, arrivals, departures, and trip information. It also helps terminal staff record bus movements and manage bus information."
+                android:text="Mindanao Bus Info helps passengers access bus availability, destinations, arrivals, departures, and trip information. It also helps terminal staff record bus movements and manage bus information."
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 android:lineSpacingExtra="4dp" />
@@ -187,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:gravity="center"
-                android:text="TerminalLink • Version 1.0"
+                android:text="Mindanao Bus Info • Version 1.0"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
 

@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TerminalLink"
+                android:text="Mindanao Bus Info"
                 android:textColor="@color/primary_dark"
                 android:textSize="26sp"
                 android:textStyle="bold" />
@@ -98,9 +98,10 @@
                     android:padding="8dp">
 
                     <TextView
+                        android:id="@+id/txtCountAvailable"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="6"
+                        android:text="0"
                         android:textColor="@color/status_available"
                         android:textSize="26sp"
                         android:textStyle="bold" />
@@ -127,9 +128,10 @@
                     android:padding="8dp">
 
                     <TextView
+                        android:id="@+id/txtCountArrivals"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
+                        android:text="0"
                         android:textColor="@color/accent"
                         android:textSize="26sp"
                         android:textStyle="bold" />
@@ -156,9 +158,10 @@
                     android:padding="8dp">
 
                     <TextView
+                        android:id="@+id/txtCountDepartures"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4"
+                        android:text="0"
                         android:textColor="@color/primary"
                         android:textSize="26sp"
                         android:textStyle="bold" />
@@ -198,6 +201,7 @@
                     android:layout_height="wrap_content"
                     android:text="See all →"
                     android:id="@+id/btnSeeAllBuses"
+                    android:singleLine="true"
                     android:textColor="@color/accent"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -222,25 +226,28 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/txtMainBusPlate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="PXR 4412"
+                        android:text="Loading..."
                         android:textColor="@color/text_primary"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/txtMainBusDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Baguio City  •  Regular Bus"
+                        android:text="Checking available fleet"
                         android:textColor="@color/text_secondary"
                         android:textSize="13sp"
                         android:layout_marginTop="5dp" />
 
                     <TextView
+                        android:id="@+id/txtMainBusStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="AVAILABLE"
+                        android:text="CHECKING"
                         android:textColor="@color/status_available"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -275,6 +282,7 @@
                     android:layout_height="wrap_content"
                     android:text="See all →"
                     android:id="@+id/btnSeeAllUpdates"
+                    android:singleLine="true"
                     android:textColor="@color/accent"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -283,6 +291,7 @@
 
 
             <LinearLayout
+                android:id="@+id/cardRecentUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -290,17 +299,19 @@
                 android:background="@drawable/bg_card">
 
                 <TextView
+                    android:id="@+id/txtRecentUpdateTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bus arrival recorded"
+                    android:text="No recent updates"
                     android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/txtRecentUpdateDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="A bus has arrived at the terminal."
+                    android:text="Recorded terminal movements will appear here."
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp"
                     android:layout_marginTop="5dp" />

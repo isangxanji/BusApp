@@ -22,6 +22,7 @@
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:text="← Back to Dashboard"
             android:textColor="@color/secondary"
             android:textSize="14sp" />
@@ -46,8 +47,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="Step 1 of 3 • Movement Details"
+            android:layout_marginTop="24dp"
+            android:text="Movement Entry Form"
             android:textColor="@color/accent"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -100,30 +101,46 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/bg_card"
-            android:padding="10dp" />
+            android:background="@drawable/bg_spinner"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Time"
-            android:textColor="@color/text_primary"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="20dp">
 
-        <EditText
-            android:id="@+id/inputMovementTime"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Movement Time"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btnPickCustomTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⏱ Custom Clock..."
+                android:textColor="@color/accent"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:padding="4dp" />
+
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spinnerTime"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/bg_card"
-            android:hint="e.g. 10:30 AM"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_secondary"
-            android:textSize="14sp" />
+            android:background="@drawable/bg_spinner"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -148,24 +165,38 @@
             android:textColorHint="@color/text_secondary"
             android:textSize="14sp" />
 
+        <!-- Primary Save Movement Button -->
         <TextView
-            android:id="@+id/btnReviewMovement"
+            android:id="@+id/btnSaveMovement"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="28dp"
             android:gravity="center"
             android:background="@color/primary"
-            android:text="Review Details →"
+            android:text="Save Movement Record"
             android:textColor="@color/surface"
             android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <!-- Optional Review Details Button -->
+        <TextView
+            android:id="@+id/btnReviewMovement"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:background="@color/accent_light"
+            android:text="Review Details First"
+            android:textColor="@color/primary"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             android:gravity="center"
-            android:text="Please check the details before confirming the record."
+            android:text="Recorded movements instantly update bus availability and terminal logs."
             android:textColor="@color/text_secondary"
             android:textSize="12sp" />
 

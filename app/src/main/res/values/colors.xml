@@ -4,12 +4,15 @@
     <color name="surface">#FFFFFF</color>
     <color name="primary">#292B2F</color>
     <color name="primary_dark">#25272B</color>
+    <color name="primary_light">#3B82F6</color>
     <color name="secondary">#55575C</color>
     <color name="accent">#D99A27</color>
     <color name="accent_light">#FFF1D6</color>
     <color name="text_primary">#25272B</color>
     <color name="text_secondary">#77736B</color>
     <color name="border">#E4DED3</color>
+    <color name="border_color">#CBD5E1</color>
+    <color name="white">#FFFFFF</color>
 
     <color name="status_available">#218653</color>
     <color name="status_en_route">#D99A27</color>

@@ -61,116 +61,12 @@
                 android:layout_marginTop="26dp"
                 android:layout_marginBottom="14dp" />
 
-            <!-- Bus Card 1 -->
+            <!-- Dynamic Bus List Container -->
             <LinearLayout
-                android:id="@+id/cardBus1"
+                android:id="@+id/busListContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="@drawable/bg_card"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PXR 4412"
-                    android:textColor="@color/text_primary"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Baguio City • Regular Bus"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp"
-                    android:layout_marginTop="5dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="AVAILABLE"
-                    android:textColor="@color/status_available"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="12dp" />
-
-            </LinearLayout>
-
-            <!-- Bus Card 2 -->
-            <LinearLayout
-                android:id="@+id/cardBus2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="@drawable/bg_card"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="BUS 1024"
-                    android:textColor="@color/text_primary"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Manila • Regular Bus"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp"
-                    android:layout_marginTop="5dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="EN ROUTE"
-                    android:textColor="@color/status_en_route"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="12dp" />
-
-            </LinearLayout>
-
-            <!-- Bus Card 3 -->
-            <LinearLayout
-                android:id="@+id/cardBus3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="@drawable/bg_card"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="BUS 2056"
-                    android:textColor="@color/text_primary"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Olongapo • Regular Bus"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp"
-                    android:layout_marginTop="5dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DEPARTED"
-                    android:textColor="@color/status_departed"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="12dp" />
-
-            </LinearLayout>
+                android:orientation="vertical" />
 
         </LinearLayout>
 

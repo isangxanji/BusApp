@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TerminalLink"
+            android:text="Mindanao Bus Info"
             android:textColor="@color/primary_dark"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -117,9 +117,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Back to Passenger Home"
+            android:text="← Back to Passenger Home"
             android:textColor="@color/primary"
             android:textStyle="bold"
+            android:singleLine="true"
             android:padding="12dp"
             android:layout_marginTop="10dp" />
 

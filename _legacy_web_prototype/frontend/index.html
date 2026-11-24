@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Pabama Bus Info Sys</title>
+  <link rel="stylesheet" href="/css/mobile.css">
+  <meta name="theme-color" content="#1e3a8a">
+</head>
+<body>
+
+  <!-- Exhibit Presentation Wrapper (For Exhibit laptop or projector display) -->
+  <div class="exhibit-container">
+    <div class="exhibit-banner">
+      <span>📱 HCI Term Project: Exhibit Demo</span>
+      <span style="opacity: 0.9;">Pabama Bus Info Sys</span>
+    </div>
+
+    <!-- Mobile Device Simulator Shell -->
+    <div class="mobile-device-shell">
+
+      <!-- Top Application Header -->
+      <header class="app-header">
+        <div class="header-top">
+          <div class="brand-title">
+            <span>🚌</span>
+            <span>Pabama Bus Info Sys</span>
+          </div>
+          <div id="status-chip" class="online-chip">
+            <span class="pulse-dot"></span> Online
+          </div>
+        </div>
+
+        <div class="freshness-bar">
+          <span id="last-sync-time">Sync: Loading...</span>
+          <span id="stale-alert" class="stale-badge" style="display: none;">⚠️ Update Pending</span>
+        </div>
+      </header>
+
+      <!-- Main Application Views (Scrollable) -->
+      <main class="app-content">
+
+        <!-- ============================================== -->
+        <!-- TAB 1: BUSES & DEPARTURES (Wireframes 1 & 2)   -->
+        <!-- ============================================== -->
+        <section id="tab-buses" style="display: flex; flex-direction: column; gap: 12px;">
+
+          <!-- Route Search & Filter Card (Wireframe 1) -->
+          <div class="filter-card">
+            <h3>Find Your Route</h3>
+            <div class="filter-group">
+              <label for="filter-origin">From: Starting Point</label>
+              <select id="filter-origin" class="select-input">
+                <option value="">All Starting Points</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="filter-destination">To: Destination</label>
+              <select id="filter-destination" class="select-input">
+                <option value="">All Destinations</option>
+              </select>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+              <label style="font-size: 0.72rem; font-weight: 600; color: #64748b;">Service Type:</label>
+              <button id="btn-reset-filter" class="btn-secondary" style="font-size: 0.7rem; padding: 3px 8px; border-radius: 6px;">Clear Filters</button>
+            </div>
+
+            <!-- Recognition Rather Than Recall: Explicit Regime Toggles -->
+            <div class="bus-type-toggle">
+              <button class="bus-type-btn active" data-type="ALL">All Services</button>
+              <button class="bus-type-btn" data-type="REGULAR">☀️ Regular (Day)</button>
+              <button class="bus-type-btn" data-type="24_HOUR">🌙 24-Hour (Night)</button>
+            </div>
+          </div>
+
+          <!-- Section Title -->
+          <div class="section-title">
+            <span>Upcoming Departures & Availability</span>
+          </div>
+
+          <!-- List of Bus Cards (Wireframe 1 & 2) -->
+          <div id="trips-container" class="trip-card-list">
+            <!-- Dynamically populated -->
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB 2: METRICS & UPDATES (Wireframe 3)         -->
+        <!-- ============================================== -->
+        <section id="tab-updates" style="display: none; flex-direction: column; gap: 12px;">
+
+          <!-- Operational Summary Counter Cards (Wireframe 3) -->
+          <div class="metrics-row">
+            <div class="metric-card">
+              <div id="metric-total-available" class="metric-number">--</div>
+              <div class="metric-label">Available Buses</div>
+            </div>
+            <div class="metric-card">
+              <div id="metric-regular" class="metric-number" style="color: #2563eb;">--</div>
+              <div class="metric-label">Regular (Day)</div>
+            </div>
+            <div class="metric-card">
+              <div id="metric-24h" class="metric-number" style="color: #d97706;">--</div>
+              <div class="metric-label">24-Hour (Night)</div>
+            </div>
+          </div>
+
+          <!-- Announcement Board (Digital Megaphone) -->
+          <div>
+            <div class="section-title" style="margin-bottom: 6px;">
+              <span>Official Terminal Announcements</span>
+            </div>
+            <div id="announcements-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Recent Updates Feed (Wireframe 3) -->
+          <div>
+            <div class="section-title" style="margin-bottom: 6px;">
+              <span>Recent Arrival & Departure Logs</span>
+            </div>
+            <div id="updates-feed" style="display: flex; flex-direction: column; gap: 6px;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB 3: STAFF PORTAL (User Need #3)             -->
+        <!-- ============================================== -->
+        <section id="tab-staff" style="display: none; flex-direction: column; gap: 12px;">
+
+          <!-- Unauthenticated Staff Login View -->
+          <div id="staff-auth-container" class="filter-card">
+            <h3>Terminal Personnel Shift Login</h3>
+            <p style="font-size: 0.75rem; color: #64748b; line-height: 1.3;">
+              Quick shift sign-in for inspectors and dispatchers using personal Name + PIN.
+            </p>
+
+            <div class="filter-group">
+              <label for="staff-name-select">Select Your Name</label>
+              <select id="staff-name-select" class="select-input">
+                <option value="">-- Choose Name from Roster --</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="staff-pin-input">4-Digit Security PIN</label>
+              <input type="password" id="staff-pin-input" class="text-input" placeholder="••••" maxlength="6" inputmode="numeric">
+            </div>
+
+            <button id="btn-staff-login" class="btn-primary" style="margin-top: 4px;">Sign In to Shift</button>
+
+            <div style="text-align: center; margin-top: 6px;">
+              <button id="btn-show-register" class="btn-secondary" style="font-size: 0.72rem; padding: 4px 8px;">
+                New Staff? Register Profile
+              </button>
+            </div>
+
+            <div style="background: #f1f5f9; padding: 8px; border-radius: 6px; font-size: 0.7rem; color: #475569; margin-top: 6px;">
+              💡 <strong>Exhibit Quick Access:</strong><br>
+              • Inspector: <em>Juan Dela Cruz</em> (PIN: <strong>1234</strong>)<br>
+              • Dispatcher: <em>Maria Santos</em> (PIN: <strong>4321</strong>)
+            </div>
+          </div>
+
+          <!-- Authenticated Staff Movement Entry Form -->
+          <div id="staff-dashboard-container" style="display: none; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 8px 12px; border-radius: 8px;">
+              <span id="staff-profile-badge" style="font-size: 0.78rem; font-weight: 700; color: #0369a1;"></span>
+              <button id="btn-staff-logout" class="btn-secondary" style="font-size: 0.7rem; padding: 3px 8px;">Sign Out</button>
+            </div>
+
+            <form id="form-staff-movement" class="filter-card">
+              <h3>Record Bus Movement</h3>
+              <p style="font-size: 0.72rem; color: #64748b;">
+                Digitize arrival/departure logs. Mandatory confirmation review required before saving.
+              </p>
+
+              <div class="filter-group">
+                <label for="staff-bus-select">Bus Vehicle</label>
+                <select id="staff-bus-select" class="select-input" required>
+                  <option value="">-- Select Bus --</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="staff-movement-type">Movement Action</label>
+                <select id="staff-movement-type" class="select-input">
+                  <option value="ARRIVAL">📥 Vehicle Arrival (Into Terminal)</option>
+                  <option value="DEPARTURE">📤 Vehicle Departure (Trip Out)</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="staff-route-select">Route Assigned</label>
+                <select id="staff-route-select" class="select-input" required>
+                  <option value="">-- Select Assigned Route --</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="staff-driver-name">Driver Operating Vehicle</label>
+                <input type="text" id="staff-driver-name" class="text-input" placeholder="e.g., Arnel Pimentel" required>
+              </div>
+
+              <div class="filter-group">
+                <label for="staff-driver-license">Driver License Number</label>
+                <input type="text" id="staff-driver-license" class="text-input" placeholder="e.g., D02-12-004312" required>
+              </div>
+
+              <div class="filter-group">
+                <label for="staff-seat-status">Seat Capacity Estimate</label>
+                <select id="staff-seat-status" class="select-input">
+                  <option value="AVAILABLE">Available Seats Recorded</option>
+                  <option value="FEW_SEATS">Few Seats Left</option>
+                  <option value="FULL_LOAD">Full Load (Seated Only)</option>
+                  <option value="STANDING_ONLY">Standing Room Allowed</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="staff-notes">Operational Notes (Optional)</label>
+                <input type="text" id="staff-notes" class="text-input" placeholder="Platform 2, fueled, night rotation standby">
+              </div>
+
+              <button type="submit" class="btn-primary" style="margin-top: 6px;">
+                Review Movement (Error Prevention)
+              </button>
+            </form>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ============================================== -->
+      <!-- MODAL 1: HCI REVIEW & CONFIRM INTERSTITIAL     -->
+      <!-- ============================================== -->
+      <div id="modal-review" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="modal-title">🛡️ Verify Details Before Broadcast</span>
+          </div>
+          <p style="font-size: 0.75rem; color: #64748b; line-height: 1.3;">
+            Please verify all details. Once confirmed, this movement is logged permanently and published live to passengers.
+          </p>
+
+          <div class="review-summary-card">
+            <div class="review-row">
+              <span class="review-label">Bus:</span>
+              <span id="rev-bus" class="review-value"></span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Movement:</span>
+              <span id="rev-type" class="review-value"></span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Route:</span>
+              <span id="rev-route" class="review-value"></span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Driver:</span>
+              <span id="rev-driver" class="review-value"></span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">License:</span>
+              <span id="rev-license" class="review-value"></span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Seat Estimate:</span>
+              <span id="rev-seats" class="review-value"></span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button id="btn-review-edit" class="btn-secondary" style="flex: 1;">✏️ Edit Details</button>
+            <button id="btn-review-confirm" class="btn-primary" style="flex: 1.5; background: #059669;">Confirm & Broadcast</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- MODAL 2: STAFF REGISTRATION MODAL              -->
+      <!-- ============================================== -->
+      <div id="modal-register" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="modal-title">Terminal Staff Registration</span>
+            <button id="btn-close-register" class="close-btn">&times;</button>
+          </div>
+
+          <form id="form-register" style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="filter-group">
+              <label for="reg-name">Full Name</label>
+              <input type="text" id="reg-name" class="text-input" placeholder="e.g., Pedro Penduko" required>
+            </div>
+
+            <div class="filter-group">
+              <label for="reg-role">Terminal Role</label>
+              <select id="reg-role" class="select-input">
+                <option value="INSPECTOR">Bus Inspector</option>
+                <option value="DISPATCHER">Dispatcher</option>
+                <option value="CONDUCTOR">Conductor</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="reg-contact">Contact Details (Phone / Email)</label>
+              <input type="text" id="reg-contact" class="text-input" placeholder="09XX-XXX-XXXX or email" required>
+            </div>
+
+            <div class="filter-group">
+              <label for="reg-pin">4 to 6-Digit Personal PIN</label>
+              <input type="password" id="reg-pin" class="text-input" placeholder="••••" maxlength="6" inputmode="numeric" required>
+            </div>
+
+            <button type="submit" class="btn-primary" style="margin-top: 6px;">Register Profile & Login</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Persistent Mobile Bottom Navigation Bar -->
+      <nav class="bottom-nav">
+        <button class="nav-item active" data-tab="buses">
+          <span class="nav-icon">🚌</span>
+          <span>Departures</span>
+        </button>
+        <button class="nav-item" data-tab="updates">
+          <span class="nav-icon">📊</span>
+          <span>Board & Logs</span>
+        </button>
+        <button class="nav-item" data-tab="staff">
+          <span class="nav-icon">📋</span>
+          <span>Staff Portal</span>
+        </button>
+      </nav>
+
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
