@@ -159,6 +159,7 @@ object FirebaseSyncManager {
                                 val busPlate = doc.getString("busPlate") ?: ""
                                 val originOrDest = doc.getString("originOrDestination") ?: ""
                                 val movementTime = doc.getString("movementTime") ?: ""
+                                val terminal = doc.getString("terminal") ?: ""
                                 val notes = doc.getString("notes")
                                 val recordedAt = doc.getLong("recordedAt") ?: System.currentTimeMillis()
 
@@ -168,6 +169,7 @@ object FirebaseSyncManager {
                                         busPlate = busPlate,
                                         originOrDestination = originOrDest,
                                         movementTime = movementTime,
+                                        terminal = terminal,
                                         notes = notes,
                                         recordedAt = recordedAt
                                     )
@@ -233,6 +235,7 @@ object FirebaseSyncManager {
                 "busPlate" to log.busPlate,
                 "originOrDestination" to log.originOrDestination,
                 "movementTime" to log.movementTime,
+                "terminal" to log.terminal,
                 "notes" to (log.notes ?: ""),
                 "recordedAt" to log.recordedAt
             )

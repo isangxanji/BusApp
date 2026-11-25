@@ -24,6 +24,7 @@ class BusRepository(
     val totalMovementLogsCount: LiveData<Int> = movementLogDataLoc.getTotalMovementLogsCount()
     val latestArrival: LiveData<MovementLogEntity?> = movementLogDataLoc.getLatestArrival()
     val allTrips: LiveData<List<TripEntity>> = tripDataLoc.getAllTrips()
+    val completedTripsCount: LiveData<Int> = tripDataLoc.getCompletedTripsCount()
     val allStaff: LiveData<List<StaffEntity>> = staffDataLoc.getAllStaff()
     val staffCount: LiveData<Int> = staffDataLoc.getStaffCount()
 
@@ -71,11 +72,28 @@ class BusRepository(
         AppDatabase.resetToDefaultData(database)
     }
 
+    suspend fun addBus(plateNumber: String, busType: String): Long = withContext(Dispatchers.IO) {
+        val cleanPlate = plateNumber.trim()
+        val cleanType = busType.trim().ifEmpty { "Regular Bus" }
+        val now = System.currentTimeMillis()
+        val bus = BusEntity(
+            plateNumber = cleanPlate,
+            destination = "",
+            busType = cleanType,
+            routeDescription = "",
+            status = "AVAILABLE",
+            lastUpdatedAt = now
+        )
+        val id = busDataLoc.insertBus(bus)
+        FirebaseSyncManager.syncBus(bus)
+        id
+    }
+
     suspend fun addBus(plateNumber: String, destination: String, busType: String): Long = withContext(Dispatchers.IO) {
         val cleanPlate = plateNumber.trim()
         val cleanDest = destination.trim()
         val cleanType = busType.trim().ifEmpty { "Regular Bus" }
-        val route = "Agora Terminal → $cleanDest"
+        val route = if (cleanDest.isNotEmpty()) "Agora Terminal → $cleanDest" else ""
         val now = System.currentTimeMillis()
         val bus = BusEntity(
             plateNumber = cleanPlate,
@@ -86,16 +104,16 @@ class BusRepository(
             lastUpdatedAt = now
         )
         val id = busDataLoc.insertBus(bus)
-        // Maintain local synchronization: insert corresponding trip
-        tripDataLoc.insertTrip(
-            TripEntity(
-                busPlate = cleanPlate,
-                route = route,
-                status = "AVAILABLE",
-                lastUpdatedAt = now
+        if (route.isNotEmpty()) {
+            tripDataLoc.insertTrip(
+                TripEntity(
+                    busPlate = cleanPlate,
+                    route = route,
+                    status = "AVAILABLE",
+                    lastUpdatedAt = now
+                )
             )
-        )
-        // Cloud Sync: push newly created bus to Firebase Firestore
+        }
         FirebaseSyncManager.syncBus(bus)
         id
     }
@@ -116,7 +134,6 @@ class BusRepository(
                 )
             )
         }
-        // Cloud Sync: push updated bus to Firebase Firestore
         FirebaseSyncManager.syncBus(updatedBus)
     }
 
@@ -127,7 +144,6 @@ class BusRepository(
         for (t in matchingTrips) {
             tripDataLoc.deleteTrip(t)
         }
-        // Cloud Sync: remove deleted bus from Firebase Firestore
         FirebaseSyncManager.deleteBus(bus.plateNumber)
     }
 
@@ -140,6 +156,10 @@ class BusRepository(
         val cleanRoute = route.trim()
         val cleanStatus = status.trim().ifEmpty { "AVAILABLE" }
         val now = System.currentTimeMillis()
+
+        val stops = cleanRoute.split("→", "->", "—").map { it.trim() }.filter { it.isNotEmpty() }
+        val finalDest = if (stops.size >= 2) stops.last() else stops.firstOrNull() ?: cleanRoute
+
         val trip = TripEntity(
             busPlate = cleanPlate,
             route = cleanRoute,
@@ -148,10 +168,11 @@ class BusRepository(
         )
         val tripId = tripDataLoc.insertTrip(trip)
 
-        // Keep bus synchronized
+        // Keep bus synchronized with assigned route and destination
         val existingBus = busDataLoc.getBusByPlate(cleanPlate)
         if (existingBus != null) {
             val updated = existingBus.copy(
+                destination = finalDest,
                 routeDescription = cleanRoute,
                 status = cleanStatus,
                 lastUpdatedAt = now
@@ -159,10 +180,9 @@ class BusRepository(
             busDataLoc.updateBus(updated)
             FirebaseSyncManager.syncBus(updated)
         } else {
-            val dest = cleanRoute.split("→", "->", "—").lastOrNull()?.trim() ?: "Mindanao"
             val newBus = BusEntity(
                 plateNumber = cleanPlate,
-                destination = dest,
+                destination = finalDest,
                 busType = "Regular Bus",
                 routeDescription = cleanRoute,
                 status = cleanStatus,
@@ -177,10 +197,14 @@ class BusRepository(
     suspend fun updateTrip(trip: TripEntity) = withContext(Dispatchers.IO) {
         val now = System.currentTimeMillis()
         tripDataLoc.updateTrip(trip.copy(lastUpdatedAt = now))
-        // Synchronize with bus records
+
+        val stops = trip.route.split("→", "->", "—").map { it.trim() }.filter { it.isNotEmpty() }
+        val finalDest = if (stops.size >= 2) stops.last() else stops.firstOrNull() ?: trip.route
+
         val bus = busDataLoc.getBusByPlate(trip.busPlate)
         if (bus != null) {
             val updated = bus.copy(
+                destination = finalDest,
                 status = trip.status,
                 routeDescription = trip.route,
                 lastUpdatedAt = now
@@ -199,14 +223,27 @@ class BusRepository(
         busPlate: String,
         movementTime: String,
         notes: String?
+    ): Long = recordMovement(movementType, busPlate, "", movementTime, notes)
+
+    suspend fun recordMovement(
+        movementType: String,
+        busPlate: String,
+        terminal: String,
+        movementTime: String,
+        notes: String?
     ): Long = withContext(Dispatchers.IO) {
         val now = System.currentTimeMillis()
         val cleanPlate = busPlate.trim()
+        val cleanTerminal = terminal.trim()
         val bus = busDataLoc.getBusByPlate(cleanPlate)
-        val originOrDest = if (movementType.equals("Arrival", ignoreCase = true)) {
-            "From ${bus?.destination ?: "Terminal"}"
-        } else {
-            "To ${bus?.destination ?: "Terminal"}"
+
+        val stops = bus?.routeDescription?.split("→", "->", "—")?.map { it.trim() }?.filter { it.isNotEmpty() } ?: emptyList()
+        val finalDestination = if (stops.size >= 2) stops.last() else (bus?.destination?.trim() ?: "")
+
+        val originOrDest = when {
+            cleanTerminal.isNotEmpty() -> cleanTerminal
+            movementType.equals("Arrival", ignoreCase = true) -> "From ${bus?.destination?.ifEmpty { "Terminal" } ?: "Terminal"}"
+            else -> "To ${bus?.destination?.ifEmpty { "Terminal" } ?: "Terminal"}"
         }
 
         val log = MovementLogEntity(
@@ -214,30 +251,34 @@ class BusRepository(
             busPlate = cleanPlate,
             originOrDestination = originOrDest,
             movementTime = movementTime.trim(),
+            terminal = cleanTerminal,
             notes = notes?.trim()?.ifEmpty { null },
             recordedAt = now
         )
         val logId = movementLogDataLoc.insertLog(log)
 
-        // Automatically update both bus and trip status to eliminate out-of-sync redundancy
-        val updatedStatus = if (movementType.equals("Arrival", ignoreCase = true)) {
-            "AVAILABLE"
-        } else {
-            "EN ROUTE"
+        val isArrival = movementType.equals("Arrival", ignoreCase = true)
+        val reachedFinalDestination = isArrival && cleanTerminal.isNotEmpty() &&
+                finalDestination.isNotEmpty() && cleanTerminal.equals(finalDestination, ignoreCase = true)
+
+        val updatedBusStatus = if (isArrival) "AVAILABLE" else "EN ROUTE"
+        val updatedTripStatus = when {
+            reachedFinalDestination -> "COMPLETED"
+            isArrival -> "AVAILABLE"
+            else -> "EN ROUTE"
         }
 
         if (bus != null) {
-            val updatedBus = bus.copy(status = updatedStatus, lastUpdatedAt = now)
+            val updatedBus = bus.copy(status = updatedBusStatus, lastUpdatedAt = now)
             busDataLoc.updateBus(updatedBus)
             FirebaseSyncManager.syncBus(updatedBus)
         }
         val trips = tripDataLoc.getAllTripsSync()
         val matchingTrip = trips.firstOrNull { it.busPlate.equals(cleanPlate, ignoreCase = true) }
         if (matchingTrip != null) {
-            tripDataLoc.updateTrip(matchingTrip.copy(status = updatedStatus, lastUpdatedAt = now))
+            tripDataLoc.updateTrip(matchingTrip.copy(status = updatedTripStatus, lastUpdatedAt = now))
         }
 
-        // Cloud Sync: push movement log to Firebase Firestore
         FirebaseSyncManager.syncMovementLog(log)
 
         logId

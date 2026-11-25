@@ -19,6 +19,7 @@ class MainViewModel(private val repository: BusRepository) : ViewModel() {
     val departures: LiveData<List<MovementLogEntity>> = repository.departures
     val latestArrival: LiveData<MovementLogEntity?> = repository.latestArrival
     val allTrips: LiveData<List<TripEntity>> = repository.allTrips
+    val completedTripsCount: LiveData<Int> = repository.completedTripsCount
     val allStaff: LiveData<List<StaffEntity>> = repository.allStaff
     val staffCount: LiveData<Int> = repository.staffCount
     val totalMovementLogsCount: LiveData<Int> = repository.totalMovementLogsCount
@@ -54,6 +55,17 @@ class MainViewModel(private val repository: BusRepository) : ViewModel() {
     suspend fun getBusByPlate(plate: String): BusEntity? = repository.getBusByPlate(plate)
 
     suspend fun getAllBusesSync(): List<BusEntity> = repository.getAllBusesSync()
+
+    fun addBus(plate: String, type: String, onDone: (Boolean) -> Unit = {}) {
+        viewModelScope.launch {
+            try {
+                repository.addBus(plate, type)
+                onDone(true)
+            } catch (e: Exception) {
+                onDone(false)
+            }
+        }
+    }
 
     fun addBus(plate: String, destination: String, type: String, onDone: (Boolean) -> Unit = {}) {
         viewModelScope.launch {
@@ -183,9 +195,20 @@ class MainViewModel(private val repository: BusRepository) : ViewModel() {
         notes: String?,
         onDone: (Boolean) -> Unit = {}
     ) {
+        recordMovement(type, plate, "", time, notes, onDone)
+    }
+
+    fun recordMovement(
+        type: String,
+        plate: String,
+        terminal: String,
+        time: String,
+        notes: String?,
+        onDone: (Boolean) -> Unit = {}
+    ) {
         viewModelScope.launch {
             try {
-                repository.recordMovement(type, plate, time, notes)
+                repository.recordMovement(type, plate, terminal, time, notes)
                 onDone(true)
             } catch (e: Exception) {
                 onDone(false)

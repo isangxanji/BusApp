@@ -160,8 +160,8 @@ class AdminDashboardActivity : AppCompatActivity() {
             binding.txtAdminBusCount.text = (buses?.size ?: 0).toString()
         }
 
-        viewModel.allTrips.observe(this) { trips ->
-            binding.txtAdminTripCount.text = (trips?.size ?: 0).toString()
+        viewModel.completedTripsCount.observe(this) { count ->
+            binding.txtAdminTripCount.text = (count ?: 0).toString()
         }
 
         viewModel.totalMovementLogsCount.observe(this) { count ->

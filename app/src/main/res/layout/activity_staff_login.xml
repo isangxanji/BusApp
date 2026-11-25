@@ -104,13 +104,16 @@
             android:backgroundTint="@color/primary" />
 
         <TextView
+            android:id="@+id/btnRegisterStaff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Staff accounts are provided by an authorized administrator. Public registration is not available."
-            android:textColor="@color/text_secondary"
-            android:textSize="11sp"
-            android:layout_marginTop="18dp" />
+            android:text="New staff member? Register account"
+            android:textColor="@color/accent"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:padding="8dp"
+            android:layout_marginTop="16dp" />
 
         <TextView
             android:id="@+id/btnBackToHome"

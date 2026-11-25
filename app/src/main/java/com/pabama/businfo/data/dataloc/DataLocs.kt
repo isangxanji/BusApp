@@ -96,6 +96,9 @@ interface TripDataLoc {
     @Query("SELECT * FROM trips ORDER BY id ASC")
     fun getAllTripsSync(): List<TripEntity>
 
+    @Query("SELECT COUNT(*) FROM trips WHERE UPPER(status) = 'COMPLETED'")
+    fun getCompletedTripsCount(): LiveData<Int>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTrip(trip: TripEntity): Long
 

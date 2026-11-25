@@ -483,12 +483,26 @@ class RecordBusMovementActivity : AppCompatActivity() {
             return
         }
 
-        // Temporary restriction until backend integration
-        Toast.makeText(
-            this,
-            "Terminal saving is not yet connected to the backend.",
-            Toast.LENGTH_LONG
-        ).show()
+        // Persist movement record to Room SQLite and Firebase
+        val movementType = getSelectedMovementType()
+        val notes = binding.inputMovementNotes.text?.toString()?.trim() ?: ""
+
+        viewModel.recordMovement(movementType, selectedBus, terminal, time, notes) { success ->
+            if (success) {
+                Toast.makeText(
+                    this,
+                    "Bus movement saved successfully ($terminal at $time)!",
+                    Toast.LENGTH_LONG
+                ).show()
+                finish()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Failed to save movement record.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     // Helper property to safely access the RadioGroup by ID

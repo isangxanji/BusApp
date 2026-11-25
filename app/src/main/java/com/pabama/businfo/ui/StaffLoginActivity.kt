@@ -90,8 +90,75 @@ class StaffLoginActivity : AppCompatActivity() {
             }
         }
 
+        binding.btnRegisterStaff.setOnClickListener {
+            showRegisterDialog()
+        }
+
         binding.btnBackToHome.setOnClickListener {
             finish()
         }
+    }
+
+    private fun showRegisterDialog() {
+        val layout = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            setPadding(50, 30, 50, 20)
+        }
+
+        val inputId = android.widget.EditText(this).apply {
+            hint = "Staff ID (e.g. STAFF002)"
+            setSingleLine(true)
+        }
+
+        val inputName = android.widget.EditText(this).apply {
+            hint = "Full Name"
+            setSingleLine(true)
+            val p = android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { topMargin = 20 }
+            layoutParams = p
+        }
+
+        val inputPwd = android.widget.EditText(this).apply {
+            hint = "Password"
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+            setSingleLine(true)
+            val p = android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { topMargin = 20 }
+            layoutParams = p
+        }
+
+        layout.addView(inputId)
+        layout.addView(inputName)
+        layout.addView(inputPwd)
+
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Register Staff Account")
+            .setView(layout)
+            .setPositiveButton("Register") { _, _ ->
+                val id = inputId.text.toString().trim()
+                val name = inputName.text.toString().trim()
+                val pwd = inputPwd.text.toString().trim()
+
+                if (id.isEmpty() || name.isEmpty() || pwd.isEmpty()) {
+                    Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
+                viewModel.addStaff(id, name, pwd) { success ->
+                    if (success) {
+                        Toast.makeText(this, "Account registered successfully! You can now log in.", Toast.LENGTH_LONG).show()
+                        binding.inputStaffId.setText(id)
+                        binding.inputStaffPassword.setText(pwd)
+                    } else {
+                        Toast.makeText(this, "Failed to register account.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 }

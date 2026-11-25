@@ -233,11 +233,21 @@ class ManageBusActivity : AppCompatActivity() {
                     return@setPositiveButton
                 }
 
-                Toast.makeText(
-                    this,
-                    "Bus registration is awaiting backend integration.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                viewModel.addBus(plate, type) { success ->
+                    if (success) {
+                        Toast.makeText(
+                            this,
+                            "Bus $plate registered successfully!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Failed to register bus.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
             .show()
     }

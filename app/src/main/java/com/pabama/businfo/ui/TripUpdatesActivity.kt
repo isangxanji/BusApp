@@ -126,19 +126,12 @@ class TripUpdatesActivity : AppCompatActivity() {
             .setPositiveButton("Apply") { _, _ ->
 
                 if (selectedIndex == 0) {
-
                     selectedTerminal = null
-                    updateTerminalFilterLabel()
-                    filterArrivals()
-
                 } else {
-
-                    Toast.makeText(
-                        this,
-                        "Terminal filtering is not yet available.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    selectedTerminal = options[selectedIndex]
                 }
+                updateTerminalFilterLabel()
+                filterArrivals()
             }
             .setNegativeButton("Cancel", null)
             .setNeutralButton("Clear Filter") { _, _ ->
@@ -230,8 +223,18 @@ class TripUpdatesActivity : AppCompatActivity() {
             it.busPlate.trim().uppercase(Locale.ROOT)
         }
 
+        // Apply terminal filter based on latest recorded arrival terminal
+        val terminalFiltered = if (selectedTerminal.isNullOrBlank()) {
+            uniqueArrivals
+        } else {
+            uniqueArrivals.filter { log ->
+                log.terminal.equals(selectedTerminal, ignoreCase = true) ||
+                        log.originOrDestination.contains(selectedTerminal!!, ignoreCase = true)
+            }
+        }
+
         // Apply search
-        val filteredArrivals = uniqueArrivals.filter { log ->
+        val filteredArrivals = terminalFiltered.filter { log ->
 
             log.busPlate.contains(query, ignoreCase = true) ||
                     log.originOrDestination.contains(
