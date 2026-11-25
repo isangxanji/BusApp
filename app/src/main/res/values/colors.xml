@@ -18,4 +18,11 @@
     <color name="status_en_route">#D99A27</color>
     <color name="status_departed">#77736B</color>
     <color name="status_unavailable">#C74343</color>
+
+    <!-- Dialog Colors -->
+    <color name="dialog_background">#404040</color>
+    <color name="dialog_text">#FFFFFF</color>
+    <color name="dialog_hint">#D1D1D1</color>
+    <color name="dialog_action">#F4B942</color>
+    <color name="dialog_delete">#FF8A80</color>
 </resources>

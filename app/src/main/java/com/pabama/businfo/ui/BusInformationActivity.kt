@@ -96,7 +96,9 @@ class BusInformationActivity : AppCompatActivity() {
                     val intent = Intent(this@BusInformationActivity, TripDetailActivity::class.java).apply {
                         putExtra("BUS_PLATE", bus.plateNumber)
                     }
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                     startActivity(intent)
+                    overridePendingTransition(0, 0)
                 }
             }
 
@@ -136,7 +138,44 @@ class BusInformationActivity : AppCompatActivity() {
 
             card.addView(plateText)
             card.addView(detailsText)
+
+            // Display the bus route
+            if (bus.routeDescription.isNotBlank()) {
+                val routeText = TextView(this).apply {
+                    val stops = bus.routeDescription
+                        .split("→", "->", "—")
+                        .map { it.trim() }
+                        .filter { it.isNotEmpty() }
+
+                    text = when {
+                        stops.size >= 2 ->
+                            "Route: ${stops.first()} → ${stops.last()}"
+
+                        stops.size == 1 ->
+                            "Route: ${stops.first()}"
+
+                        else -> "Route not specified"
+                    }
+                    textSize = 13f
+                    setTextColor(getColor(R.color.text_secondary))
+                    setPadding(0, 12, 0, 0)
+                }
+
+                card.addView(routeText)
+            }
+
             card.addView(statusText)
+
+            // View details label
+            val viewDetailsText = TextView(this).apply {
+                text = "View Bus Details →"
+                textSize = 12f
+                setTextColor(getColor(R.color.accent))
+                setTypeface(null, Typeface.BOLD)
+                setPadding(0, 20, 0, 0)
+            }
+
+            card.addView(viewDetailsText)
 
             binding.busListContainer.addView(card)
         }

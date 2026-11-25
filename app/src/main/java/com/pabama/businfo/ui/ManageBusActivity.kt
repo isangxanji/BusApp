@@ -22,6 +22,7 @@ import com.pabama.businfo.databinding.ActivityManageBusBinding
 import com.pabama.businfo.ui.components.StatusBadge
 import com.pabama.businfo.ui.viewmodel.MainViewModel
 import com.pabama.businfo.ui.viewmodel.MainViewModelFactory
+import android.widget.ScrollView
 
 class ManageBusActivity : AppCompatActivity() {
 
@@ -48,6 +49,7 @@ class ManageBusActivity : AppCompatActivity() {
         // Back button
         binding.btnBack.setOnClickListener {
             finish()
+            overridePendingTransition(0, 0)
         }
 
         // Add New Bus
@@ -154,6 +156,34 @@ class ManageBusActivity : AppCompatActivity() {
 
             card.addView(plateText)
             card.addView(detailsText)
+
+// Display origin and destination
+            if (bus.routeDescription.isNotBlank()) {
+                val routeText = TextView(this).apply {
+
+                    val stops = bus.routeDescription
+                        .split("→", "->", "—")
+                        .map { it.trim() }
+                        .filter { it.isNotEmpty() }
+
+                    text = when {
+                        stops.size >= 2 ->
+                            "Route: ${stops.first()} → ${stops.last()}"
+
+                        stops.size == 1 ->
+                            "Route: ${stops.first()}"
+
+                        else -> "Route not specified"
+                    }
+
+                    textSize = 13f
+                    setTextColor(getColor(R.color.text_secondary))
+                    setPadding(0, 12, 0, 0)
+                }
+
+                card.addView(routeText)
+            }
+
             card.addView(bottomRow)
 
             binding.containerBusRecords.addView(card)
@@ -170,15 +200,7 @@ class ManageBusActivity : AppCompatActivity() {
             hint = "Plate Number (e.g. KBA 1010)"
             setSingleLine(true)
         }
-        val inputDestination = EditText(this).apply {
-            hint = "Destination (e.g. Valencia)"
-            setSingleLine(true)
-            val p = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { topMargin = 20 }
-            layoutParams = p
-        }
+
         val inputType = EditText(this).apply {
             hint = "Bus Type (e.g. Regular Bus)"
             setText("Regular Bus")
@@ -191,7 +213,6 @@ class ManageBusActivity : AppCompatActivity() {
         }
 
         layout.addView(inputPlate)
-        layout.addView(inputDestination)
         layout.addView(inputType)
 
         AlertDialog.Builder(this)
@@ -200,21 +221,23 @@ class ManageBusActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Add") { _, _ ->
                 val plate = inputPlate.text.toString().trim()
-                val destination = inputDestination.text.toString().trim()
                 val type = inputType.text.toString().trim()
 
-                if (plate.isEmpty() || destination.isEmpty()) {
-                    Toast.makeText(this, "Plate number and destination are required.", Toast.LENGTH_SHORT).show()
+                if (plate.isEmpty() || type.isEmpty()) {
+                    Toast.makeText(
+                        this,
+                        "Plate number and bus type are required.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                     return@setPositiveButton
                 }
 
-                viewModel.addBus(plate, destination, type) { success ->
-                    if (success) {
-                        Toast.makeText(this, "Bus $plate added successfully!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "Failed to add bus.", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                Toast.makeText(
+                    this,
+                    "Bus registration is awaiting backend integration.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .show()
     }
@@ -232,28 +255,19 @@ class ManageBusActivity : AppCompatActivity() {
         }
         layout.addView(inputPlate)
 
-        val inputDestination = EditText(this).apply {
-            hint = "Destination"
-            setText(bus.destination)
-            setSingleLine(true)
-            val p = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { topMargin = 20 }
-            layoutParams = p
-        }
-        layout.addView(inputDestination)
-
         val inputType = EditText(this).apply {
             hint = "Bus Type"
             setText(bus.busType)
             setSingleLine(true)
-            val p = LinearLayout.LayoutParams(
+
+            layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { topMargin = 20 }
-            layoutParams = p
+            ).apply {
+                topMargin = 20
+            }
         }
+
         layout.addView(inputType)
 
         val statusSpinner = Spinner(this).apply {
@@ -274,9 +288,16 @@ class ManageBusActivity : AppCompatActivity() {
         if (statusIdx >= 0) statusSpinner.setSelection(statusIdx)
         layout.addView(statusSpinner)
 
+        // Make the dialog content scrollable
+        val scrollView = ScrollView(this).apply {
+            isFillViewport = true
+            isVerticalScrollBarEnabled = true
+            addView(layout)
+        }
+
         AlertDialog.Builder(this)
             .setTitle("Edit Bus ${bus.plateNumber}")
-            .setView(layout)
+            .setView(scrollView)
             .setNegativeButton("Cancel", null)
             .setNeutralButton("Delete") { _, _ ->
                 AlertDialog.Builder(this)
@@ -296,26 +317,38 @@ class ManageBusActivity : AppCompatActivity() {
             }
             .setPositiveButton("Save") { _, _ ->
                 val plate = inputPlate.text.toString().trim()
-                val destination = inputDestination.text.toString().trim()
                 val type = inputType.text.toString().trim()
                 val status = statusSpinner.selectedItem.toString()
 
-                if (plate.isEmpty() || destination.isEmpty()) {
-                    Toast.makeText(this, "Plate number and destination are required.", Toast.LENGTH_SHORT).show()
+                if (plate.isEmpty() || type.isEmpty()) {
+                    Toast.makeText(
+                        this,
+                        "Plate number and bus type are required.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                     return@setPositiveButton
                 }
 
                 val updated = bus.copy(
                     plateNumber = plate,
-                    destination = destination,
                     busType = type,
                     status = status
                 )
+
                 viewModel.updateBus(updated) { success ->
                     if (success) {
-                        Toast.makeText(this, "Bus $plate updated successfully!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Bus $plate updated successfully!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
-                        Toast.makeText(this, "Failed to update bus.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Failed to update bus.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }

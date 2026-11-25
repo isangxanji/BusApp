@@ -30,40 +30,64 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="Latest bus arrivals and departures"
+                android:text="Latest bus arrivals at different terminals"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
 
+            <!-- Search and Filter -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="24dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal"
-                android:background="@drawable/bg_card"
-                android:padding="4dp">
+                android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/btnArrivals"
+                <EditText
+                    android:id="@+id/inputSearchArrivals"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="52dp"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Arrivals"
-                    android:textColor="@color/surface"
-                    android:textStyle="bold"
-                    android:background="@color/primary" />
+                    android:background="@drawable/bg_card"
+                    android:hint="Search bus or location..."
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:imeOptions="actionSearch" />
 
-                <TextView
-                    android:id="@+id/btnDepartures"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Departures"
-                    android:textColor="@color/text_secondary"
-                    android:textStyle="bold" />
+                <ImageButton
+                    android:id="@+id/btnFilterTerminal"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_card"
+                    android:src="@drawable/ic_filter"
+                    android:scaleType="centerInside"
+                    android:padding="14dp"
+                    android:contentDescription="Filter by terminal" />
 
             </LinearLayout>
+
+            <!-- Active Terminal Filter -->
+            <TextView
+                android:id="@+id/txtActiveTerminalFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/accent"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/layoutArrivals"
@@ -71,43 +95,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="Recent Arrivals"
-                    android:textColor="@color/text_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
                 <LinearLayout
                     android:id="@+id/containerArrivalsList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layoutDepartures"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="Recent Departures"
-                    android:textColor="@color/text_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/containerDeparturesList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:orientation="vertical" />
 
             </LinearLayout>
@@ -129,6 +121,6 @@
     <include
         layout="@layout/layout_passenger_bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="64dp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

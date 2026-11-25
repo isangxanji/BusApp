@@ -79,6 +79,6 @@
     <include
         layout="@layout/layout_staff_bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="64dp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

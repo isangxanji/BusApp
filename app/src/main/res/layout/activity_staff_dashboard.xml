@@ -49,27 +49,18 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/btnPassengerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Passenger"
-                    android:textColor="@color/accent"
-                    android:textSize="12sp"
+                    android:id="@+id/btnStaffMenu"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="&#8942;"
+                    android:textSize="28sp"
                     android:textStyle="bold"
-                    android:padding="8dp"
-                    android:background="@drawable/bg_card"
-                    android:layout_marginEnd="6dp" />
-
-                <TextView
-                    android:id="@+id/btnStaffLogout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Log Out"
-                    android:textColor="@color/status_unavailable"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:padding="8dp"
-                    android:background="@drawable/bg_card" />
+                    android:textColor="@color/primary_dark"
+                    android:gravity="center"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Staff menu"
+                    android:clickable="true"
+                    android:focusable="true" />
 
             </LinearLayout>
 
@@ -189,13 +180,13 @@
                     android:gravity="center_vertical"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:background="@color/accent_light">
+                    android:background="@color/background">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="＋  Record Bus Movement"
+                        android:text="Record Bus Movement"
                         android:textColor="@color/primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -318,6 +309,6 @@
     <include
         layout="@layout/layout_staff_bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="64dp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

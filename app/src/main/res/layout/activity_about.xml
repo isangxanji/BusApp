@@ -88,7 +88,7 @@
                 android:layout_marginTop="10dp"
                 android:padding="16dp"
                 android:background="@drawable/bg_card"
-                android:text="Mindanao Bus Info helps passengers access bus availability, destinations, arrivals, departures, and trip information. It also helps terminal staff record bus movements and manage bus information."
+                android:text="Mindanao Bus Info helps passengers check bus availability, destinations, routes, and arrival updates. It aims to help commuters plan their trips by providing bus information updated by authorized terminal staff."
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 android:lineSpacingExtra="4dp" />
@@ -123,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="16dp"
-                    android:text="Passengers can view available buses and their destinations."
+                    android:text="View available buses, their destinations, routes, and current status."
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
 
@@ -140,14 +140,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="16dp"
-                    android:text="Passengers can check the latest recorded arrivals and departures."
+                    android:text="Check the latest recorded bus arrivals to help plan your trip."
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3. Staff Record Bus Movements"
+                    android:text="3. View Bus Route and History"
                     android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -156,7 +156,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Authorized staff can record bus arrivals and departures and update bus information."
+                    android:text="Select a bus to view its route, intermediate stops, and recorded arrival history."
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
 
@@ -198,6 +198,6 @@
     <include
         layout="@layout/layout_passenger_bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="64dp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

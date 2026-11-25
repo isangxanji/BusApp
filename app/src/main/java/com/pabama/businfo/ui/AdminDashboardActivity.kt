@@ -23,6 +23,7 @@ import com.pabama.businfo.data.entity.StaffEntity
 import com.pabama.businfo.databinding.ActivityAdminDashboardBinding
 import com.pabama.businfo.ui.viewmodel.MainViewModel
 import com.pabama.businfo.ui.viewmodel.MainViewModelFactory
+import androidx.appcompat.widget.PopupMenu
 
 class AdminDashboardActivity : AppCompatActivity() {
 
@@ -55,56 +56,96 @@ class AdminDashboardActivity : AppCompatActivity() {
             insets
         }
 
-        val adminName = sessionManager.getStaffName() ?: "Admin"
-        binding.txtAdminSubtitle.text = "Logged in as $adminName (${sessionManager.getStaffId()})"
-
         // Navigation Actions
-        binding.btnAdminLogout.setOnClickListener {
-            sessionManager.clearSession()
-            Toast.makeText(this, "Logged out successfully.", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
-        }
+        binding.btnAdminMenu.setOnClickListener { view ->
 
-        binding.btnGoToStaffDashboard.setOnClickListener {
-            startActivity(Intent(this, StaffDashboardActivity::class.java))
-        }
+            val popupMenu = PopupMenu(this, view)
 
+            popupMenu.menu.add("Staff Dashboard")
+            popupMenu.menu.add("Passenger View")
+            popupMenu.menu.add("Log Out")
+
+            popupMenu.setOnMenuItemClickListener { item ->
+
+                when (item.title.toString()) {
+
+                    "Staff Dashboard" -> {
+                        startActivity(
+                            Intent(this, StaffDashboardActivity::class.java)
+                                .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        )
+                        overridePendingTransition(0, 0)
+                        true
+                    }
+
+                    "Passenger View" -> {
+                        val intent = Intent(
+                            this, MainActivity::class.java
+                        ).apply {
+                            putExtra("VIEW_PASSENGER", true)
+                            addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        }
+
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                        true
+                    }
+
+                    "Log Out" -> {
+                        sessionManager.clearSession()
+
+                        Toast.makeText(
+                            this,
+                            "Logged out successfully.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        val intent = Intent(
+                            this, MainActivity::class.java
+                        )
+
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                                    Intent.FLAG_ACTIVITY_NO_ANIMATION
+
+                        startActivity(intent)
+                        finish()
+                        overridePendingTransition(0, 0)
+
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
+            popupMenu.show()
+        }
         binding.btnAdminManageBuses.setOnClickListener {
-            startActivity(Intent(this, ManageBusActivity::class.java))
+            startActivity(
+                Intent(this, ManageBusActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
+            overridePendingTransition(0, 0)
         }
 
         binding.btnAdminManageTrips.setOnClickListener {
-            startActivity(Intent(this, ManageTripsActivity::class.java))
+            startActivity(
+                Intent(this, ManageTripsActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
+            overridePendingTransition(0, 0)
         }
 
         binding.btnAdminRecordMovement.setOnClickListener {
-            startActivity(Intent(this, RecordBusMovementActivity::class.java))
+            startActivity(
+                Intent(this, RecordBusMovementActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
+            overridePendingTransition(0, 0)
         }
 
-        binding.btnAdminPassengerView.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-        }
-
-        binding.btnAdminResetData.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Reset Data to Defaults")
-                .setMessage("Are you sure you want to reset all buses, trips, movement logs, and staff back to default seed records? This will clear any testing entries.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Reset Everything") { _, _ ->
-                    val app = application as PabamaApplication
-                    viewModel.resetDatabaseToDefaults(app.database) { success ->
-                        if (success) {
-                            Toast.makeText(this, "Database reset to initial defaults successfully!", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(this, "Failed to reset database.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-                .show()
-        }
 
         binding.btnAddStaffAccount.setOnClickListener {
             showAddStaffDialog()
@@ -149,14 +190,14 @@ class AdminDashboardActivity : AppCompatActivity() {
         for (staff in staffList) {
             val card = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
-                setPadding(32, 28, 32, 28)
+                setPadding(40, 36, 40, 36)
                 background = getDrawable(R.drawable.bg_card)
 
                 val params = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    topMargin = 16
+                    topMargin = 24
                 }
                 layoutParams = params
             }
@@ -175,14 +216,15 @@ class AdminDashboardActivity : AppCompatActivity() {
 
             val txtName = TextView(this).apply {
                 text = staff.name
-                textSize = 16f
+                textSize = 17f
                 setTextColor(getColor(R.color.text_primary))
                 setTypeface(null, Typeface.BOLD)
             }
 
             val txtId = TextView(this).apply {
                 text = "ID: ${staff.staffId}"
-                textSize = 12f
+                textSize = 13f
+                setPadding(0, 8, 0, 0)
                 setTextColor(getColor(R.color.text_secondary))
             }
             nameLayout.addView(txtName)

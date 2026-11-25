@@ -38,58 +38,25 @@
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/txtAdminSubtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="System &amp; Staff Management"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/btnAdminLogout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Log Out"
-                    android:textColor="@color/status_unavailable"
-                    android:textSize="12sp"
+                    android:id="@+id/btnAdminMenu"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="&#8942;"
+                    android:textSize="28sp"
                     android:textStyle="bold"
-                    android:padding="8dp"
-                    android:background="@drawable/bg_card" />
+                    android:textColor="@color/primary_dark"
+                    android:gravity="center"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Administrator menu"
+                    android:clickable="true"
+                    android:focusable="true" />
 
             </LinearLayout>
 
-            <!-- Quick Mode Switch Banner -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_card"
-                android:padding="12dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Go to Staff Dashboard:"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/btnGoToStaffDashboard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Staff Dashboard →"
-                    android:textColor="@color/accent"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:padding="6dp" />
-
-            </LinearLayout>
 
             <!-- Overview Metrics Grid -->
             <TextView
@@ -191,7 +158,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Active Trips"
+                        android:text="Total Trips"
                         android:textColor="@color/text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
@@ -245,16 +212,17 @@
                 <TextView
                     android:id="@+id/btnAddStaffAccount"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:text="+ Add Staff"
-                    android:textColor="@color/surface"
+                    android:textColor="@color/white"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    android:paddingStart="14dp"
-                    android:paddingEnd="14dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:background="@color/primary" />
+                    android:gravity="center"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:background="@drawable/bg_primary_button"
+                    android:clickable="true"
+                    android:focusable="true" />
 
             </LinearLayout>
 
@@ -271,7 +239,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
-                android:text="Management Operations"
+                android:text="Quick Actions"
                 android:textColor="@color/text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -287,18 +255,18 @@
                 <LinearLayout
                     android:id="@+id/btnAdminManageBuses"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
+                    android:layout_height="55dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
                     android:background="@color/background">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Manage Fleet Buses"
+                        android:text="Manage Buses"
                         android:textColor="@color/primary"
                         android:textSize="14sp" />
 
@@ -313,19 +281,19 @@
                 <LinearLayout
                     android:id="@+id/btnAdminManageTrips"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
                     android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
+                    android:layout_height="55dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
                     android:background="@color/background">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Manage Trip Routes"
+                        android:text="Manage Trips"
                         android:textColor="@color/primary"
                         android:textSize="14sp" />
 
@@ -340,12 +308,12 @@
                 <LinearLayout
                     android:id="@+id/btnAdminRecordMovement"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
                     android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
+                    android:layout_height="55dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
                     android:background="@color/background">
 
                     <TextView
@@ -361,61 +329,6 @@
                         android:layout_height="wrap_content"
                         android:text="→"
                         android:textColor="@color/primary"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btnAdminPassengerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:background="@color/background">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="View Passenger Screen"
-                        android:textColor="@color/primary"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="→"
-                        android:textColor="@color/primary"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btnAdminResetData"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:background="@drawable/bg_card">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="↺  Reset Database to Default Seed"
-                        android:textColor="@color/status_unavailable"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="→"
-                        android:textColor="@color/status_unavailable"
                         android:textSize="16sp" />
                 </LinearLayout>
 

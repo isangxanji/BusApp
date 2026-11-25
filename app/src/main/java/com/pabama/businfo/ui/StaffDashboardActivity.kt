@@ -20,6 +20,7 @@ import com.pabama.businfo.databinding.ActivityStaffDashboardBinding
 import com.pabama.businfo.ui.components.StatusBadge
 import com.pabama.businfo.ui.viewmodel.MainViewModel
 import com.pabama.businfo.ui.viewmodel.MainViewModelFactory
+import androidx.appcompat.widget.PopupMenu
 
 class StaffDashboardActivity : AppCompatActivity() {
 
@@ -55,39 +56,98 @@ class StaffDashboardActivity : AppCompatActivity() {
         if (sessionManager.isAdmin()) {
             binding.btnOpenAdminPanel.visibility = View.VISIBLE
             binding.btnOpenAdminPanel.setOnClickListener {
-                startActivity(Intent(this, AdminDashboardActivity::class.java))
+                startActivity(
+                    Intent(this, AdminDashboardActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                )
+                overridePendingTransition(0, 0)
             }
         } else {
             binding.btnOpenAdminPanel.visibility = View.GONE
         }
 
-        // Passenger View Button
-        binding.btnPassengerView.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
+        // Staff dropdown menu
+        binding.btnStaffMenu.setOnClickListener { view ->
 
-        // Log Out Button
-        binding.btnStaffLogout.setOnClickListener {
-            sessionManager.clearSession()
-            Toast.makeText(this, "Logged out successfully.", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
+            val popupMenu = PopupMenu(this, view)
+
+            popupMenu.menu.add("Passenger View")
+            popupMenu.menu.add("Log Out")
+
+            popupMenu.setOnMenuItemClickListener { item ->
+
+                when (item.title.toString()) {
+
+                    "Passenger View" -> {
+
+                        val intent = Intent(
+                            this, MainActivity::class.java
+                        ).apply {
+                            putExtra("VIEW_PASSENGER", true)
+                            addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        }
+
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                        true
+                    }
+
+                    "Log Out" -> {
+
+                        sessionManager.clearSession()
+
+                        Toast.makeText(
+                            this,
+                            "Logged out successfully.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        val intent = Intent(
+                            this, MainActivity::class.java
+                        )
+
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                                    Intent.FLAG_ACTIVITY_NO_ANIMATION
+
+                        startActivity(intent)
+                        finish()
+                        overridePendingTransition(0, 0)
+
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
+            popupMenu.show()
         }
 
         // Quick Action Buttons
         binding.btnRecordMovement.setOnClickListener {
-            startActivity(Intent(this, RecordBusMovementActivity::class.java))
+            startActivity(
+                Intent(this, RecordBusMovementActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
+            overridePendingTransition(0, 0)
         }
 
         binding.btnManageBuses.setOnClickListener {
-            startActivity(Intent(this, ManageBusActivity::class.java))
+            startActivity(
+                Intent(this, ManageBusActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
+            overridePendingTransition(0, 0)
         }
 
         binding.btnManageTrips.setOnClickListener {
-            startActivity(Intent(this, ManageTripsActivity::class.java))
+            startActivity(
+                Intent(this, ManageTripsActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            )
+            overridePendingTransition(0, 0)
         }
 
         // Observe Dynamic Counts
@@ -147,13 +207,19 @@ class StaffDashboardActivity : AppCompatActivity() {
                 isClickable = true
                 isFocusable = true
                 setOnClickListener {
-                    startActivity(Intent(this@StaffDashboardActivity, ManageBusActivity::class.java))
+                    startActivity(
+                        Intent(
+                            this@StaffDashboardActivity,
+                            ManageBusActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    )
+                    overridePendingTransition(0, 0)
                 }
             }
 
             val plateText = TextView(this).apply {
                 text = bus.plateNumber
-                textSize = 16f
+                textSize = 17f
                 setTextColor(getColor(R.color.text_primary))
                 setTypeface(null, Typeface.BOLD)
             }
@@ -187,6 +253,26 @@ class StaffDashboardActivity : AppCompatActivity() {
 
             card.addView(plateText)
             card.addView(detailsText)
+
+            val stops = bus.routeDescription
+                .split("→", "->", "—")
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+
+            if (stops.size >= 2 &&
+                !stops.first().equals("Terminal", ignoreCase = true) &&
+                !stops.last().equals("Destination", ignoreCase = true)
+            ) {
+                val routeText = TextView(this).apply {
+                    text = "Route: ${stops.first()} → ${stops.last()}"
+                    textSize = 13f
+                    setTextColor(getColor(R.color.text_secondary))
+                    setPadding(0, 12, 0, 0)
+                }
+
+                card.addView(routeText)
+            }
+
             card.addView(statusText)
 
             binding.containerStaffBuses.addView(card)

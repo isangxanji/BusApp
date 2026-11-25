@@ -19,30 +19,37 @@
             android:padding="20dp">
 
             <!-- App Header -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mindanao Bus Info"
-                android:textColor="@color/primary_dark"
-                android:textSize="26sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btnOpenStaffDashboard"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Staff Dashboard"
-                android:textColor="@color/surface"
-                android:backgroundTint="@color/primary" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bus availability and trip information"
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp"
-                android:layout_marginTop="4dp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Mindanao Bus Info"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btnOpenStaffDashboard"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="&#8942;"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:gravity="center"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Staff and Admin menu"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
 
             <!-- Announcement -->
             <LinearLayout
@@ -64,7 +71,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Stay updated with the latest bus arrivals and departures."
+                    android:text="Stay updated with the latest bus arrivals at different terminals."
                     android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -144,36 +151,6 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <Space
-                    android:layout_width="8dp"
-                    android:layout_height="1dp" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/bg_card"
-                    android:padding="8dp">
-
-                    <TextView
-                        android:id="@+id/txtCountDepartures"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textColor="@color/primary"
-                        android:textSize="26sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Departures"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
             </LinearLayout>
 
             <!-- Available Buses -->
@@ -213,51 +190,62 @@
                 android:id="@+id/cardBus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
+                android:orientation="vertical"
                 android:padding="16dp"
-                android:background="@drawable/bg_card">
+                android:background="@drawable/bg_card"
+                android:clickable="true"
+                android:focusable="true">
 
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/txtMainBusPlate"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:text="Loading..."
+                    android:textColor="@color/text_primary"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/txtMainBusPlate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Loading..."
-                        android:textColor="@color/text_primary"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/txtMainBusDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Checking available fleet"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:layout_marginTop="5dp" />
 
-                    <TextView
-                        android:id="@+id/txtMainBusDetails"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Checking available fleet"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="13sp"
-                        android:layout_marginTop="5dp" />
+                <TextView
+                    android:id="@+id/txtMainBusRoute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/txtMainBusStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="CHECKING"
-                        android:textColor="@color/status_available"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="12dp" />
+                <TextView
+                    android:id="@+id/txtMainBusStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CHECKING"
+                    android:textColor="@color/status_available"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp" />
 
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/txtMainBusViewDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Bus Details →"
+                    android:textColor="@color/accent"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
-
-            <!-- Recent Updates -->
 
             <!-- Recent Updates Header -->
             <LinearLayout
@@ -296,7 +284,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp"
-                android:background="@drawable/bg_card">
+                android:background="@drawable/bg_card"
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
                     android:id="@+id/txtRecentUpdateTitle"
@@ -304,8 +294,19 @@
                     android:layout_height="wrap_content"
                     android:text="No recent updates"
                     android:textColor="@color/text_primary"
-                    android:textSize="15sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtRecentUpdateStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ARRIVED"
+                    android:textColor="@color/status_available"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/txtRecentUpdateDesc"
@@ -316,8 +317,25 @@
                     android:textSize="13sp"
                     android:layout_marginTop="5dp" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/txtRecentUpdateDestination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone" />
 
+                <TextView
+                    android:id="@+id/txtRecentUpdateTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -336,6 +354,6 @@
     <include
         layout="@layout/layout_passenger_bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="64dp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -1,10 +1,8 @@
 package com.pabama.businfo.ui
 
-import android.graphics.Color
+import android.content.Intent
 import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -18,10 +16,24 @@ import com.pabama.businfo.data.entity.MovementLogEntity
 import com.pabama.businfo.databinding.ActivityTripUpdatesBinding
 import com.pabama.businfo.ui.viewmodel.MainViewModel
 import com.pabama.businfo.ui.viewmodel.MainViewModelFactory
+import androidx.core.widget.doAfterTextChanged
+import com.pabama.businfo.data.entity.BusEntity
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import java.util.Locale
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 
 class TripUpdatesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTripUpdatesBinding
+    private var allArrivalLogs: List<MovementLogEntity> = emptyList()
+
+    private var availableBuses: List<BusEntity> = emptyList()
+
+    private var selectedTerminal: String? = null
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory((application as PabamaApplication).repository)
     }
@@ -41,63 +53,202 @@ class TripUpdatesActivity : AppCompatActivity() {
         // Setup bottom navigation
         NavigationHelper.setupPassengerBottomNav(this, "UPDATES")
 
-        // Arrivals / Departures toggle
-        binding.btnArrivals.setOnClickListener {
-            showArrivalsTab()
+        viewModel.allBuses.observe(this) { buses ->
+            availableBuses = buses.orEmpty()
+            filterArrivals()
         }
 
-        binding.btnDepartures.setOnClickListener {
-            showDeparturesTab()
-        }
-
-        // Observe Live Arrivals
+        /// Observe Live Arrivals
         viewModel.arrivals.observe(this) { arrivals ->
-            renderMovements(binding.containerArrivalsList, arrivals, true)
+            allArrivalLogs = arrivals
+            filterArrivals()
         }
 
-        // Observe Live Departures
-        viewModel.departures.observe(this) { departures ->
-            renderMovements(binding.containerDeparturesList, departures, false)
+        binding.inputSearchArrivals.doAfterTextChanged {
+            filterArrivals()
         }
 
-        showArrivalsTab()
+        binding.btnFilterTerminal.setOnClickListener {
+            showTerminalFilterDialog()
+        }
+
+        binding.txtActiveTerminalFilter.setOnClickListener {
+            selectedTerminal = null
+            updateTerminalFilterLabel()
+            filterArrivals()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         NavigationHelper.setupPassengerBottomNav(this, "UPDATES")
+        filterArrivals()
     }
 
-    private fun showArrivalsTab() {
-        val activeBg = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadius = 24f
-            setColor(getColor(R.color.primary))
+    private fun showTerminalFilterDialog() {
+
+        val terminals = availableBuses
+            .flatMap { bus ->
+                bus.routeDescription
+                    .split("→", "->", "—")
+                    .map { it.trim() }
+            }
+            .filter {
+                it.isNotBlank() &&
+                        !it.equals("Terminal", ignoreCase = true) &&
+                        !it.equals("Destination", ignoreCase = true)
+            }
+            .distinctBy { it.lowercase(Locale.ROOT) }
+            .sorted()
+
+        if (terminals.isEmpty()) {
+            Toast.makeText(
+                this,
+                "No terminals available.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
         }
-        binding.btnArrivals.background = activeBg
-        binding.btnArrivals.setTextColor(getColor(R.color.surface))
 
-        binding.btnDepartures.setBackgroundColor(Color.TRANSPARENT)
-        binding.btnDepartures.setTextColor(getColor(R.color.text_secondary))
+        val options = listOf("All terminals") + terminals
 
-        binding.layoutArrivals.visibility = View.VISIBLE
-        binding.layoutDepartures.visibility = View.GONE
+        var selectedIndex = options.indexOf(selectedTerminal)
+            .coerceAtLeast(0)
+
+        AlertDialog.Builder(this)
+            .setTitle("Filter by Terminal")
+            .setSingleChoiceItems(
+                options.toTypedArray(),
+                selectedIndex
+            ) { _, which ->
+                selectedIndex = which
+            }
+            .setPositiveButton("Apply") { _, _ ->
+
+                if (selectedIndex == 0) {
+
+                    selectedTerminal = null
+                    updateTerminalFilterLabel()
+                    filterArrivals()
+
+                } else {
+
+                    Toast.makeText(
+                        this,
+                        "Terminal filtering is not yet available.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .setNeutralButton("Clear Filter") { _, _ ->
+                selectedTerminal = null
+                updateTerminalFilterLabel()
+                filterArrivals()
+            }
+            .show()
     }
 
-    private fun showDeparturesTab() {
-        val activeBg = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadius = 24f
-            setColor(getColor(R.color.primary))
+    private fun updateTerminalFilterLabel() {
+
+        val terminal = selectedTerminal
+
+        binding.txtActiveTerminalFilter.visibility =
+            if (terminal == null) View.GONE else View.VISIBLE
+
+        binding.txtActiveTerminalFilter.text =
+            terminal?.let { "$it  ×" } ?: ""
+    }
+    private fun getBusDestination(plate: String): String {
+
+        val bus = availableBuses.firstOrNull {
+            it.plateNumber.trim().equals(
+                plate.trim(),
+                ignoreCase = true
+            )
+        } ?: return "Not specified"
+
+        val stops = bus.routeDescription
+            .split("→", "->", "—")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
+        val hasValidRoute = stops.size >= 2 &&
+                stops.none {
+                    it.equals("Terminal", ignoreCase = true) ||
+                            it.equals("Destination", ignoreCase = true)
+                }
+
+        return if (hasValidRoute) {
+            stops.last()
+        } else {
+            "Not assigned"
         }
-        binding.btnDepartures.background = activeBg
-        binding.btnDepartures.setTextColor(getColor(R.color.surface))
+    }
 
-        binding.btnArrivals.setBackgroundColor(Color.TRANSPARENT)
-        binding.btnArrivals.setTextColor(getColor(R.color.text_secondary))
+    private fun filterArrivals() {
 
-        binding.layoutArrivals.visibility = View.GONE
-        binding.layoutDepartures.visibility = View.VISIBLE
+        val query = binding.inputSearchArrivals.text
+            .toString()
+            .trim()
+
+        val dateFormat = SimpleDateFormat(
+            "yyyy-MM-dd",
+            Locale.US
+        ).apply {
+            timeZone = TimeZone.getTimeZone("Asia/Manila")
+        }
+
+        val today = dateFormat.format(Date())
+
+        val timeFormat = SimpleDateFormat(
+            "hh:mm a",
+            Locale.US
+        ).apply {
+            timeZone = TimeZone.getTimeZone("Asia/Manila")
+            isLenient = false
+        }
+
+        // Display only today's arrivals
+        val todayArrivals = allArrivalLogs.filter { log ->
+            log.recordedAt > 0 &&
+                    dateFormat.format(Date(log.recordedAt)) == today
+        }
+
+        // Latest arrival first
+        val sortedArrivals = todayArrivals.sortedWith(
+            compareByDescending<MovementLogEntity> { log ->
+                runCatching {
+                    timeFormat.parse(log.movementTime.trim())?.time
+                        ?: Long.MIN_VALUE
+                }.getOrDefault(Long.MIN_VALUE)
+            }.thenByDescending { it.recordedAt }
+        )
+
+        // Keep only the latest arrival of each bus
+        val uniqueArrivals = sortedArrivals.distinctBy {
+            it.busPlate.trim().uppercase(Locale.ROOT)
+        }
+
+        // Apply search
+        val filteredArrivals = uniqueArrivals.filter { log ->
+
+            log.busPlate.contains(query, ignoreCase = true) ||
+                    log.originOrDestination.contains(
+                        query,
+                        ignoreCase = true
+                    ) ||
+                    getBusDestination(log.busPlate).contains(
+                        query,
+                        ignoreCase = true
+                    )
+        }
+
+        renderMovements(
+            binding.containerArrivalsList,
+            filteredArrivals,
+            true
+        )
     }
 
     private fun renderMovements(
@@ -109,7 +260,11 @@ class TripUpdatesActivity : AppCompatActivity() {
 
         if (logs.isEmpty()) {
             val emptyText = TextView(this).apply {
-                text = if (isArrival) "No arrivals recorded yet." else "No departures recorded yet."
+                text = if (binding.inputSearchArrivals.text.isNullOrBlank()) {
+                    "No bus arrivals recorded today."
+                } else {
+                    "No matching bus arrivals found today."
+                }
                 textSize = 14f
                 setTextColor(getColor(R.color.text_secondary))
                 setPadding(0, 32, 0, 32)
@@ -128,21 +283,21 @@ class TripUpdatesActivity : AppCompatActivity() {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    topMargin = 24
+                    bottomMargin = 24
                 }
                 layoutParams = params
             }
 
             val plateText = TextView(this).apply {
                 text = log.busPlate
-                textSize = 16f
+                textSize = 17f
                 setTextColor(getColor(R.color.text_primary))
                 setTypeface(null, Typeface.BOLD)
             }
 
             val routeText = TextView(this).apply {
                 text = log.originOrDestination
-                textSize = 14f
+                textSize = 13f
                 setTextColor(getColor(R.color.text_secondary))
                 val p = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -154,41 +309,61 @@ class TripUpdatesActivity : AppCompatActivity() {
             }
 
             val statusText = TextView(this).apply {
-                text = "${if (isArrival) "Arrived" else "Departed"} • ${log.movementTime}"
-                textSize = 13f
+                text = "ARRIVED"
+                textSize = 12f
                 setTypeface(null, Typeface.BOLD)
-                setTextColor(
-                    if (isArrival) getColor(R.color.status_available) else getColor(R.color.status_departed)
-                )
-                val p = LinearLayout.LayoutParams(
+                setTextColor(getColor(R.color.status_available))
+
+                layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    topMargin = 16
+                    topMargin = 10
                 }
-                layoutParams = p
+            }
+
+            val destinationText = TextView(this).apply {
+                text = "To ${getBusDestination(log.busPlate)}"
+                textSize = 13f
+                setTextColor(getColor(R.color.text_secondary))
+
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = 10
+                }
+            }
+
+            val timeText = TextView(this).apply {
+                text = log.movementTime
+                textSize = 13f
+                setTextColor(getColor(R.color.text_secondary))
+
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = 10
+                }
             }
 
             card.addView(plateText)
-            card.addView(routeText)
             card.addView(statusText)
+            card.addView(routeText)
+            card.addView(destinationText)
+            card.addView(timeText)
 
-            if (!log.notes.isNullOrBlank()) {
-                val notesText = TextView(this).apply {
-                    text = "Note: ${log.notes}"
-                    textSize = 12f
-                    setTextColor(getColor(R.color.text_secondary))
-                    val p = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    ).apply {
-                        topMargin = 8
-                    }
-                    layoutParams = p
-                }
-                card.addView(notesText)
+            card.isClickable = true
+            card.isFocusable = true
+
+            card.setOnClickListener {
+                val intent = Intent(this, TripDetailActivity::class.java)
+                intent.putExtra("BUS_PLATE", log.busPlate)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
             }
-
             container.addView(card)
         }
     }

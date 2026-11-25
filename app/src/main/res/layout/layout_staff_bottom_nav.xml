@@ -4,8 +4,8 @@
     android:orientation="horizontal"
     android:background="@color/surface"
     android:elevation="8dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
 
     <TextView
         android:id="@+id/btnStaffDashboard"
@@ -13,10 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="8dp"
-        android:text="⌂&#10;Dashboard"
+        android:padding="4dp"
+        android:text="Dashboard"
         android:textColor="@color/text_secondary"
-        android:textSize="11sp" />
+        android:textSize="12sp"
+        android:drawableTop="@drawable/ic_nav_dashboard"
+        android:drawablePadding="4dp"
+        android:drawableTint="@color/text_secondary" />
 
     <TextView
         android:id="@+id/btnStaffRecord"
@@ -24,10 +27,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="8dp"
-        android:text="＋&#10;Record"
+        android:padding="4dp"
+        android:text="Record"
         android:textColor="@color/text_secondary"
-        android:textSize="11sp" />
+        android:textSize="12sp"
+        android:drawableTop="@drawable/ic_nav_record"
+        android:drawablePadding="4dp"
+        android:drawableTint="@color/text_secondary" />
 
     <TextView
         android:id="@+id/btnStaffBuses"
@@ -35,10 +41,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="8dp"
-        android:text="▤&#10;Buses"
+        android:padding="4dp"
+        android:text="Buses"
         android:textColor="@color/text_secondary"
-        android:textSize="11sp" />
+        android:textSize="12sp"
+        android:drawableTop="@drawable/ic_nav_bus"
+        android:drawablePadding="4dp"
+        android:drawableTint="@color/text_secondary" />
 
     <TextView
         android:id="@+id/btnStaffTrips"
@@ -46,9 +55,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="8dp"
-        android:text="◷&#10;Trips"
+        android:padding="4dp"
+        android:text="Trips"
         android:textColor="@color/text_secondary"
-        android:textSize="11sp" />
+        android:textSize="12sp"
+        android:drawableTop="@drawable/ic_nav_trips"
+        android:drawablePadding="4dp"
+        android:drawableTint="@color/text_secondary" />
 
 </LinearLayout>

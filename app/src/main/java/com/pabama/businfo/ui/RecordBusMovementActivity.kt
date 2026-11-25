@@ -19,6 +19,9 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import android.view.View
+import android.widget.AdapterView
+import com.pabama.businfo.data.entity.BusEntity
 
 class RecordBusMovementActivity : AppCompatActivity() {
 
@@ -32,15 +35,34 @@ class RecordBusMovementActivity : AppCompatActivity() {
     private lateinit var busAdapter: ArrayAdapter<String>
     private lateinit var timeAdapter: ArrayAdapter<String>
 
+    private var availableBuses: List<BusEntity> = emptyList()
+    private var previousSelectedBus = ""
+
+    private val terminalOptions = mutableListOf<String>()
+
+    private lateinit var terminalAdapter: ArrayAdapter<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityRecordBusMovementBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val initialLeft = binding.main.paddingLeft
+        val initialTop = binding.main.paddingTop
+        val initialRight = binding.main.paddingRight
+        val initialBottom = binding.main.paddingBottom
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+
+            v.setPadding(
+                initialLeft + systemBars.left,
+                initialTop + systemBars.top,
+                initialRight + systemBars.right,
+                initialBottom + systemBars.bottom
+            )
+
             insets
         }
 
@@ -50,6 +72,7 @@ class RecordBusMovementActivity : AppCompatActivity() {
         // Back button
         binding.btnBack.setOnClickListener {
             finish()
+            overridePendingTransition(0, 0)
         }
 
         // Setup Bus Spinner with Black Font layout
@@ -58,19 +81,79 @@ class RecordBusMovementActivity : AppCompatActivity() {
         }
         binding.spinnerBus.adapter = busAdapter
 
+        // Setup terminal dropdown
+        terminalAdapter = ArrayAdapter(
+            this,
+            R.layout.item_spinner_selected,
+            terminalOptions
+        ).apply {
+            setDropDownViewResource(
+                R.layout.item_spinner_dropdown
+            )
+        }
+
+        binding.spinnerTerminal.adapter = terminalAdapter
+
+// Detect selected bus changes
+        binding.spinnerBus.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    updateSelectedBusInformation()
+                }
+
+                override fun onNothingSelected(
+                    parent: AdapterView<*>?
+                ) {
+                    updateSelectedBusInformation()
+                }
+            }
+
+        // Update terminal label based on movement type
+        binding.radioMovementType.setOnCheckedChangeListener { _, checkedId ->
+
+            binding.txtTerminalLabel.text =
+                if (checkedId == R.id.radioArrival) {
+                    "Arrival Terminal"
+                } else {
+                    "Departure Terminal"
+                }
+        }
+
         // Populate Bus Spinner from Room DB
         viewModel.allBuses.observe(this) { buses ->
+
+            availableBuses = buses.orEmpty()
+
             busPlates.clear()
-            if (buses.isNullOrEmpty()) {
+
+            if (availableBuses.isEmpty()) {
+
                 busPlates.add("No buses available")
+
                 binding.btnSaveMovement.isEnabled = false
                 binding.btnReviewMovement.isEnabled = false
+
             } else {
-                busPlates.addAll(buses.map { it.plateNumber })
+
+                busPlates.add("Select bus")
+
+                busPlates.addAll(
+                    availableBuses.map { it.plateNumber }
+                )
+
                 binding.btnSaveMovement.isEnabled = true
                 binding.btnReviewMovement.isEnabled = true
             }
+
             busAdapter.notifyDataSetChanged()
+
+            updateSelectedBusInformation()
         }
 
         // Setup Time Dropdown with Black Font layout
@@ -89,11 +172,16 @@ class RecordBusMovementActivity : AppCompatActivity() {
         // Review Movement Button (with Confirmation Dialog)
         binding.btnReviewMovement.setOnClickListener {
             val movementType = getSelectedMovementType()
+            val terminal = getSelectedTerminal()
             val selectedBus = binding.spinnerBus.selectedItem?.toString() ?: ""
+
             val time = getSelectedTime()
             val notes = binding.inputMovementNotes.text?.toString()?.trim() ?: ""
 
-            if (selectedBus.isEmpty() || selectedBus == "No buses available") {
+            if (selectedBus.isEmpty() ||
+                selectedBus == "No buses available" ||
+                selectedBus == "Select bus"
+            ) {
                 Toast.makeText(this, "Please add a bus in Manage Buses before recording movement.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -103,13 +191,30 @@ class RecordBusMovementActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (terminal.isEmpty()) {
+
+                Toast.makeText(
+                    this,
+                    "Please select a terminal.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                return@setOnClickListener
+            }
+
             val reviewMessage = """
                 Movement Type: $movementType
-                
+
                 Bus: $selectedBus
-                
+
+                Origin: ${binding.txtBusOrigin.text}
+
+                $movementType Terminal: $terminal
+
+                Final Destination: ${binding.txtBusDestination.text}
+
                 Time: $time
-                
+
                 Notes: ${if (notes.isEmpty()) "None" else notes}
             """.trimIndent()
 
@@ -121,6 +226,126 @@ class RecordBusMovementActivity : AppCompatActivity() {
                     performSaveMovement()
                 }
                 .show()
+        }
+    }
+
+    private fun updateSelectedBusInformation() {
+
+        val selectedPlate =
+            binding.spinnerBus.selectedItem?.toString() ?: ""
+
+        val previousTerminal =
+            binding.spinnerTerminal.selectedItem?.toString().orEmpty()
+
+        val isSameBus = selectedPlate.equals(
+            previousSelectedBus,
+            ignoreCase = true
+        )
+
+        previousSelectedBus = selectedPlate
+
+        val selectedBus = availableBuses.firstOrNull {
+            it.plateNumber.equals(
+                selectedPlate,
+                ignoreCase = true
+            )
+        }
+
+
+        terminalOptions.clear()
+        terminalOptions.add("Select terminal")
+
+        if (selectedBus == null) {
+
+            binding.layoutSelectedBusInfo.visibility = View.GONE
+
+            binding.spinnerTerminal.isEnabled = false
+
+            terminalAdapter.notifyDataSetChanged()
+            binding.spinnerTerminal.setSelection(0)
+
+            return
+        }
+
+        // Extract stops from the existing route
+        val routeStops = selectedBus.routeDescription
+            .split("→", "->", "—")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
+        val hasValidRoute = routeStops.size >= 2 &&
+                routeStops.none {
+                    it.equals("Terminal", ignoreCase = true) ||
+                            it.equals("Destination", ignoreCase = true)
+                } &&
+                !routeStops.first().equals(
+                    routeStops.last(),
+                    ignoreCase = true
+                )
+
+        if (!hasValidRoute) {
+
+            binding.layoutSelectedBusInfo.visibility = View.VISIBLE
+
+            binding.txtBusOrigin.text = "Not assigned"
+            binding.txtBusDestination.text = "Not assigned"
+            binding.txtBusRoute.text =
+                "Assign a route in Manage Trips first."
+
+            binding.spinnerTerminal.isEnabled = false
+
+            terminalAdapter.notifyDataSetChanged()
+            binding.spinnerTerminal.setSelection(0)
+
+            return
+        }
+
+        // Display selected bus information
+        binding.layoutSelectedBusInfo.visibility = View.VISIBLE
+
+        binding.txtBusOrigin.text =
+            if (routeStops.size >= 2) {
+                routeStops.first()
+            } else {
+                "Not specified"
+            }
+
+        binding.txtBusDestination.text =
+            if (routeStops.size >= 2) {
+                routeStops.last()
+            } else {
+                selectedBus.destination
+            }
+
+        binding.txtBusRoute.text =
+            if (routeStops.isNotEmpty()) {
+                routeStops.joinToString(" → ")
+            } else {
+                "Route not specified"
+            }
+
+        // Populate terminal dropdown
+        if (routeStops.size >= 2) {
+
+            terminalOptions.addAll(
+                routeStops.distinct()
+            )
+
+            binding.spinnerTerminal.isEnabled = true
+
+        } else {
+
+            binding.spinnerTerminal.isEnabled = false
+        }
+
+        terminalAdapter.notifyDataSetChanged()
+
+        val previousIndex = terminalOptions.indexOf(previousTerminal)
+
+        if (isSameBus && previousIndex > 0) {
+            binding.spinnerTerminal.setSelection(previousIndex)
+        } else {
+            binding.spinnerTerminal.setSelection(0)
         }
     }
 
@@ -199,32 +424,71 @@ class RecordBusMovementActivity : AppCompatActivity() {
         }
     }
 
+    private fun getSelectedTerminal(): String {
+
+        val terminal = binding.spinnerTerminal
+            .selectedItem?.toString()?.trim() ?: ""
+
+        return if (
+            terminal.isEmpty() ||
+            terminal == "Select terminal" ||
+            !binding.spinnerTerminal.isEnabled
+        ) {
+            ""
+        } else {
+            terminal
+        }
+    }
+
     private fun performSaveMovement() {
-        val movementType = getSelectedMovementType()
-        val selectedBus = binding.spinnerBus.selectedItem?.toString() ?: ""
+
+        val selectedBus =
+            binding.spinnerBus.selectedItem?.toString() ?: ""
+
+        val terminal = getSelectedTerminal()
+
         val time = getSelectedTime()
-        val notes = binding.inputMovementNotes.text?.toString()?.trim() ?: ""
 
-        if (selectedBus.isEmpty() || selectedBus == "No buses available") {
-            Toast.makeText(this, "Please add a bus in Manage Buses before recording movement.", Toast.LENGTH_SHORT).show()
+        if (
+            selectedBus.isEmpty() ||
+            selectedBus == "No buses available" ||
+            selectedBus == "Select bus"
+        ) {
+            Toast.makeText(
+                this,
+                "Please select a bus.",
+                Toast.LENGTH_SHORT
+            ).show()
+
             return
         }
 
-        // Strict time verification - cannot save random strings like "Six Seven"
+        if (terminal.isEmpty()) {
+            Toast.makeText(
+                this,
+                "Please select a terminal.",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            return
+        }
+
         if (!isValidTimeFormat(time)) {
-            Toast.makeText(this, "Please select a valid time from the dropdown or clock picker.", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "Please select a valid movement time.",
+                Toast.LENGTH_SHORT
+            ).show()
+
             return
         }
 
-        // Persist movement to Room SQLite database
-        viewModel.recordMovement(movementType, selectedBus, time, notes) { success ->
-            if (success) {
-                Toast.makeText(this, "Bus movement saved successfully ($time)!", Toast.LENGTH_LONG).show()
-                finish()
-            } else {
-                Toast.makeText(this, "Failed to save movement record.", Toast.LENGTH_SHORT).show()
-            }
-        }
+        // Temporary restriction until backend integration
+        Toast.makeText(
+            this,
+            "Terminal saving is not yet connected to the backend.",
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     // Helper property to safely access the RadioGroup by ID
