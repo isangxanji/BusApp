@@ -1,14 +1,19 @@
 package com.pabama.businfo.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.pabama.businfo.PabamaApplication
+import com.pabama.businfo.R
 import com.pabama.businfo.data.SessionManager
 import com.pabama.businfo.databinding.ActivityStaffLoginBinding
 import com.pabama.businfo.ui.viewmodel.MainViewModel
@@ -46,6 +51,21 @@ class StaffLoginActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        val isAdmin = intent.getBooleanExtra("IS_ADMIN", false)
+        if (isAdmin) {
+            binding.txtLoginHeader.text = "Admin Login"
+            binding.txtLoginSubtitle.text = "Sign in using administrator credentials."
+            binding.btnRegisterStaff.visibility = View.VISIBLE
+            binding.btnRegisterStaff.text = "Register account"
+            binding.btnRequestStaffAccount.visibility = View.GONE
+        } else {
+            binding.txtLoginHeader.text = "Staff Login"
+            binding.txtLoginSubtitle.text = "Sign in using your authorized staff credentials."
+            binding.btnRegisterStaff.visibility = View.GONE
+            binding.btnRequestStaffAccount.visibility = View.VISIBLE
+            binding.btnRequestStaffAccount.text = "Need an account? Submit request"
         }
 
         binding.inputStaffPassword.setOnEditorActionListener { _, actionId, _ ->
@@ -94,50 +114,33 @@ class StaffLoginActivity : AppCompatActivity() {
             showRegisterDialog()
         }
 
+        binding.btnRequestStaffAccount.setOnClickListener {
+            val mailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:rotia.james12@gmail.com")
+                putExtra(Intent.EXTRA_SUBJECT, "Staff Account Addition Request - Mindanao Bus Info")
+                putExtra(Intent.EXTRA_TEXT, "Hello Admin,\n\nI would like to request a new staff account.\n\nFull Name: \nContact Number: \nPreferred Staff ID: \nRole (Inspector/Dispatcher/Conductor): \n\nThank you.")
+            }
+            try {
+                startActivity(Intent.createChooser(mailIntent, "Submit Account Request"))
+            } catch (e: Exception) {
+                Toast.makeText(this, "No email app found to submit request.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         binding.btnBackToHome.setOnClickListener {
             finish()
         }
     }
 
     private fun showRegisterDialog() {
-        val layout = android.widget.LinearLayout(this).apply {
-            orientation = android.widget.LinearLayout.VERTICAL
-            setPadding(50, 30, 50, 20)
-        }
+        val dialogView = layoutInflater.inflate(R.layout.dialog_register_staff, null)
+        val inputId = dialogView.findViewById<EditText>(R.id.dialogInputId)
+        val inputName = dialogView.findViewById<EditText>(R.id.dialogInputName)
+        val inputPwd = dialogView.findViewById<EditText>(R.id.dialogInputPwd)
 
-        val inputId = android.widget.EditText(this).apply {
-            hint = "Staff ID (e.g. STAFF002)"
-            setSingleLine(true)
-        }
-
-        val inputName = android.widget.EditText(this).apply {
-            hint = "Full Name"
-            setSingleLine(true)
-            val p = android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { topMargin = 20 }
-            layoutParams = p
-        }
-
-        val inputPwd = android.widget.EditText(this).apply {
-            hint = "Password"
-            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
-            setSingleLine(true)
-            val p = android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { topMargin = 20 }
-            layoutParams = p
-        }
-
-        layout.addView(inputId)
-        layout.addView(inputName)
-        layout.addView(inputPwd)
-
-        androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Register Staff Account")
-            .setView(layout)
+        AlertDialog.Builder(this)
+            .setTitle("Register Account")
+            .setView(dialogView)
             .setPositiveButton("Register") { _, _ ->
                 val id = inputId.text.toString().trim()
                 val name = inputName.text.toString().trim()
@@ -148,13 +151,18 @@ class StaffLoginActivity : AppCompatActivity() {
                     return@setPositiveButton
                 }
 
+                if (id.startsWith("ADMIN", ignoreCase = true)) {
+                    Toast.makeText(this, "Admin accounts must be created by an existing administrator.", Toast.LENGTH_LONG).show()
+                    return@setPositiveButton
+                }
+
                 viewModel.addStaff(id, name, pwd) { success ->
                     if (success) {
                         Toast.makeText(this, "Account registered successfully! You can now log in.", Toast.LENGTH_LONG).show()
                         binding.inputStaffId.setText(id)
                         binding.inputStaffPassword.setText(pwd)
                     } else {
-                        Toast.makeText(this, "Failed to register account.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Staff ID '$id' already exists or failed to register.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

@@ -5,29 +5,40 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/accent</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorAccent">@color/primary</item>
+        <item name="colorControlActivated">@color/primary</item>
         <item name="android:statusBarColor">@color/primary_dark</item>
         <item name="android:windowBackground">@color/background</item>
 
-        <!-- Disable screen transition animations -->
+        <!-- Disable screen transition animations for instant feel -->
         <item name="android:windowAnimationStyle">@style/NoActivityAnimation</item>
 
         <!-- Custom dialog theme -->
         <item name="alertDialogTheme">@style/Theme.PabamaApp.Dialog</item>
+        <item name="android:alertDialogTheme">@style/Theme.PabamaApp.Dialog</item>
+        <item name="materialAlertDialogTheme">@style/Theme.PabamaApp.Dialog</item>
 
     </style>
 
-    <!-- Dark dialog with readable text -->
+    <!-- Dynamic contrast dialog adapting to Light / Dark mode -->
     <style name="Theme.PabamaApp.Dialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="android:windowAnimationStyle">@style/NoActivityAnimation</item>
 
+        <item name="colorSurface">@color/dialog_background</item>
         <item name="colorAccent">@color/dialog_action</item>
         <item name="android:colorAccent">@color/dialog_action</item>
+        <item name="colorControlActivated">@color/dialog_action</item>
+        <item name="colorControlNormal">@color/dialog_hint</item>
 
         <item name="android:colorBackground">@color/dialog_background</item>
         <item name="android:textColorPrimary">@color/dialog_text</item>
         <item name="android:textColorSecondary">@color/dialog_hint</item>
         <item name="android:textColorHint">@color/dialog_hint</item>
+        <item name="editTextColor">@color/dialog_text</item>
+        <item name="android:editTextColor">@color/dialog_text</item>
+        <item name="textColorAlertDialogListItem">@color/dialog_text</item>
 
         <item name="buttonBarPositiveButtonStyle">@style/DialogActionButton</item>
         <item name="buttonBarNegativeButtonStyle">@style/DialogCancelButton</item>
@@ -35,19 +46,18 @@
 
     </style>
 
-    <!-- Add, Save, Confirm buttons -->
     <style name="DialogActionButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/dialog_action</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <!-- Cancel and Edit buttons -->
     <style name="DialogCancelButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/dialog_text</item>
     </style>
 
-    <!-- Neutral Delete button -->
     <style name="DialogDeleteButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/dialog_delete</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- Instant screen transitions -->
@@ -56,16 +66,6 @@
         <item name="android:activityOpenExitAnimation">@null</item>
         <item name="android:activityCloseEnterAnimation">@null</item>
         <item name="android:activityCloseExitAnimation">@null</item>
-
-        <item name="android:taskOpenEnterAnimation">@null</item>
-        <item name="android:taskOpenExitAnimation">@null</item>
-        <item name="android:taskCloseEnterAnimation">@null</item>
-        <item name="android:taskCloseExitAnimation">@null</item>
-
-        <item name="android:windowEnterAnimation">@null</item>
-        <item name="android:windowExitAnimation">@null</item>
     </style>
-
-    <style name="Theme.BusApp" parent="Theme.PabamaApp" />
 
 </resources>

@@ -236,12 +236,12 @@ class AdminDashboardActivity : AppCompatActivity() {
                 textSize = 11f
                 setTypeface(null, Typeface.BOLD)
                 setPadding(18, 6, 18, 6)
-                setTextColor(if (isAdminRole) Color.parseColor("#154C34") else Color.parseColor("#44474E"))
+                setTextColor(if (isAdminRole) Color.parseColor("#1E3A8A") else Color.parseColor("#334155"))
 
                 val bg = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
                     cornerRadius = 24f
-                    setColor(if (isAdminRole) Color.parseColor("#D4EBD8") else Color.parseColor("#ECEBE8"))
+                    setColor(if (isAdminRole) Color.parseColor("#DBEAFE") else Color.parseColor("#E2E8F0"))
                 }
                 background = bg
                 val p = LinearLayout.LayoutParams(
@@ -258,12 +258,12 @@ class AdminDashboardActivity : AppCompatActivity() {
                 textSize = 11f
                 setTypeface(null, Typeface.BOLD)
                 setPadding(18, 6, 18, 6)
-                setTextColor(if (staff.isActive) Color.parseColor("#218653") else Color.parseColor("#C74343"))
+                setTextColor(if (staff.isActive) Color.parseColor("#166534") else Color.parseColor("#991B1B"))
 
                 val bg = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
                     cornerRadius = 24f
-                    setColor(if (staff.isActive) Color.parseColor("#E5F3EA") else Color.parseColor("#FCE8E8"))
+                    setColor(if (staff.isActive) Color.parseColor("#DCFCE7") else Color.parseColor("#FEE2E2"))
                 }
                 background = bg
             }
@@ -378,11 +378,15 @@ class AdminDashboardActivity : AppCompatActivity() {
 
         val inputStaffId = EditText(this).apply {
             hint = "Staff ID (e.g. STAFF002 or ADMIN002)"
+            setTextColor(getColor(R.color.dialog_text))
+            setHintTextColor(getColor(R.color.dialog_hint))
             setSingleLine(true)
         }
 
         val inputName = EditText(this).apply {
             hint = "Full Name"
+            setTextColor(getColor(R.color.dialog_text))
+            setHintTextColor(getColor(R.color.dialog_hint))
             setSingleLine(true)
             val p = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -393,6 +397,8 @@ class AdminDashboardActivity : AppCompatActivity() {
 
         val inputPassword = EditText(this).apply {
             hint = "Initial Password"
+            setTextColor(getColor(R.color.dialog_text))
+            setHintTextColor(getColor(R.color.dialog_hint))
             setSingleLine(true)
             val p = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -438,6 +444,8 @@ class AdminDashboardActivity : AppCompatActivity() {
     private fun showChangePasswordDialog(staff: StaffEntity) {
         val inputNewPwd = EditText(this).apply {
             hint = "Enter new password"
+            setTextColor(getColor(R.color.dialog_text))
+            setHintTextColor(getColor(R.color.dialog_hint))
             setSingleLine(true)
             setPadding(40, 30, 40, 30)
         }

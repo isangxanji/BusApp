@@ -13,29 +13,34 @@ object StatusBadge {
 
         when (status.trim().uppercase()) {
             "AVAILABLE" -> {
-                backgroundColor = Color.parseColor("#E5F3EA")
-                textColor = Color.parseColor("#218653")
-                borderColor = Color.parseColor("#A9D8BA")
+                backgroundColor = Color.parseColor("#DCFCE7")
+                textColor = Color.parseColor("#166534")
+                borderColor = Color.parseColor("#86EFAC")
             }
             "EN ROUTE" -> {
-                backgroundColor = Color.parseColor("#FFF1D6")
-                textColor = Color.parseColor("#A66D0B")
-                borderColor = Color.parseColor("#E8C77F")
+                backgroundColor = Color.parseColor("#DBEAFE")
+                textColor = Color.parseColor("#1E3A8A")
+                borderColor = Color.parseColor("#93C5FD")
+            }
+            "COMPLETED" -> {
+                backgroundColor = Color.parseColor("#E0F2FE")
+                textColor = Color.parseColor("#075985")
+                borderColor = Color.parseColor("#7DD3FC")
             }
             "DEPARTED" -> {
-                backgroundColor = Color.parseColor("#ECEBE8")
-                textColor = Color.parseColor("#77736B")
-                borderColor = Color.parseColor("#D5D2CB")
+                backgroundColor = Color.parseColor("#E2E8F0")
+                textColor = Color.parseColor("#334155")
+                borderColor = Color.parseColor("#CBD5E1")
             }
             "UNAVAILABLE" -> {
-                backgroundColor = Color.parseColor("#FCE8E8")
-                textColor = Color.parseColor("#C74343")
-                borderColor = Color.parseColor("#E8B5B5")
+                backgroundColor = Color.parseColor("#FEE2E2")
+                textColor = Color.parseColor("#991B1B")
+                borderColor = Color.parseColor("#FCA5A5")
             }
             else -> {
-                backgroundColor = Color.parseColor("#ECEBE8")
-                textColor = Color.parseColor("#55575C")
-                borderColor = Color.parseColor("#D5D2CB")
+                backgroundColor = Color.parseColor("#E2E8F0")
+                textColor = Color.parseColor("#334155")
+                borderColor = Color.parseColor("#CBD5E1")
             }
         }
 

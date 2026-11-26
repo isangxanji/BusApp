@@ -141,7 +141,7 @@ class ManageTripsActivity : AppCompatActivity() {
             val routeText = TextView(this).apply {
                 text = when {
                     routeStops.size >= 2 ->
-                        "Route: ${routeStops.first()} → ${routeStops.last()}"
+                        "Route: ${routeStops.first()} to ${routeStops.last()}"
 
                     routeStops.size == 1 ->
                         "Route: ${routeStops.first()}"
@@ -282,7 +282,7 @@ class ManageTripsActivity : AppCompatActivity() {
                     listOf(origin.selectedItem.toString()) +
                             intermediateStops +
                             listOf(destination.selectedItem.toString())
-                    ).joinToString(" → ")
+                    ).joinToString(" to ")
         }
 
         fun isValid(): Boolean {
@@ -457,6 +457,9 @@ class ManageTripsActivity : AppCompatActivity() {
             val inputStop = EditText(this).apply {
                 hint = "Terminal or stop"
                 setText(existingStop)
+                setTextColor(getColor(R.color.dialog_text))
+                setHintTextColor(getColor(R.color.dialog_hint))
+                inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS
                 setSingleLine(true)
 
                 layoutParams = LinearLayout.LayoutParams(
@@ -941,6 +944,7 @@ class ManageTripsActivity : AppCompatActivity() {
             "AVAILABLE",
             "EN ROUTE",
             "DEPARTED",
+            "COMPLETED",
             "UNAVAILABLE"
         )
 

@@ -1,28 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#F2EEE7</color>
+    <!-- Background & Surface for Light Mode -->
+    <color name="background">#F8FAFC</color>
     <color name="surface">#FFFFFF</color>
-    <color name="primary">#292B2F</color>
-    <color name="primary_dark">#25272B</color>
+    <color name="card_inner">#F1F5F9</color>
+    
+    <!-- Primary Blue & Variations -->
+    <color name="primary">#1E3A8A</color>
+    <color name="primary_dark">#172554</color>
     <color name="primary_light">#3B82F6</color>
-    <color name="secondary">#55575C</color>
-    <color name="accent">#D99A27</color>
-    <color name="accent_light">#FFF1D6</color>
-    <color name="text_primary">#25272B</color>
-    <color name="text_secondary">#77736B</color>
-    <color name="border">#E4DED3</color>
-    <color name="border_color">#CBD5E1</color>
+    
+    <!-- Secondary & Accent Blues -->
+    <color name="secondary">#2563EB</color>
+    <color name="secondary_dark">#1D4ED8</color>
+    <color name="accent">#1E3A8A</color>
+    <color name="accent_light">#DBEAFE</color>
+    
+    <!-- Typography in Deep Navy & Slate -->
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#475569</color>
+    
+    <!-- Borders -->
+    <color name="border">#E2E8F0</color>
+    <color name="border_color">#93C5FD</color>
     <color name="white">#FFFFFF</color>
 
-    <color name="status_available">#218653</color>
-    <color name="status_en_route">#D99A27</color>
-    <color name="status_departed">#77736B</color>
-    <color name="status_unavailable">#C74343</color>
+    <!-- Operational Status Colors -->
+    <color name="status_available">#15803D</color>
+    <color name="status_en_route">#2563EB</color>
+    <color name="status_completed">#0284C7</color>
+    <color name="status_departed">#64748B</color>
+    <color name="status_unavailable">#DC2626</color>
 
-    <!-- Dialog Colors -->
-    <color name="dialog_background">#404040</color>
-    <color name="dialog_text">#FFFFFF</color>
-    <color name="dialog_hint">#D1D1D1</color>
-    <color name="dialog_action">#F4B942</color>
-    <color name="dialog_delete">#FF8A80</color>
+    <!-- Dialog Colors: Light mode dialog with crisp dark text -->
+    <color name="dialog_background">#FFFFFF</color>
+    <color name="dialog_text">#0F172A</color>
+    <color name="dialog_hint">#64748B</color>
+    <color name="dialog_action">#1E3A8A</color>
+    <color name="dialog_delete">#DC2626</color>
 </resources>

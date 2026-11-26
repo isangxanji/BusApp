@@ -98,7 +98,7 @@ class TripDetailActivity : AppCompatActivity() {
                 binding.txtDetailBusPlate.text = bus.plateNumber
                 binding.txtDetailBusType.text = bus.busType
                 StatusBadge.setStatus(binding.txtDetailBusStatus, bus.status)
-                binding.txtDetailDestination.text = bus.destination
+                binding.txtDetailDestination.text = bus.destination.ifBlank { "Route not assigned" }
 
                 // Dynamically display matching route stops
                 val stops = bus.routeDescription.split("→", "->", "—")
@@ -194,7 +194,7 @@ class TripDetailActivity : AppCompatActivity() {
 
             // Existing location information
             val locationText = TextView(this).apply {
-                text = log.originOrDestination
+                text = log.terminal.ifBlank { log.originOrDestination }
                 textSize = 15f
                 setTextColor(getColor(R.color.text_primary))
                 setTypeface(

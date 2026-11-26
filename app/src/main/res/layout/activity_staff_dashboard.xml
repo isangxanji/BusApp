@@ -180,24 +180,22 @@
                     android:gravity="center_vertical"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:background="@color/background">
+                    android:background="@drawable/bg_action_row">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Record Bus Movement"
-                        android:textColor="@color/primary"
+                        android:textColor="@color/text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="→"
-                        android:textColor="@color/primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:contentDescription="Open" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -209,22 +207,21 @@
                     android:gravity="center_vertical"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:background="@color/background">
+                    android:background="@drawable/bg_action_row">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Manage Buses"
-                        android:textColor="@color/primary"
+                        android:textColor="@color/text_primary"
                         android:textSize="15sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="→"
-                        android:textColor="@color/primary"
-                        android:textSize="16sp" />
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:contentDescription="Open" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -236,22 +233,21 @@
                     android:gravity="center_vertical"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:background="@color/background">
+                    android:background="@drawable/bg_action_row">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Manage Trips"
-                        android:textColor="@color/primary"
+                        android:textColor="@color/text_primary"
                         android:textSize="15sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="→"
-                        android:textColor="@color/primary"
-                        android:textSize="16sp" />
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:contentDescription="Open" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -264,7 +260,7 @@
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
                     android:visibility="gone"
-                    android:background="@color/accent_light">
+                    android:background="@drawable/bg_action_row">
 
                     <TextView
                         android:layout_width="0dp"
@@ -275,13 +271,11 @@
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="→"
-                        android:textColor="@color/accent"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:contentDescription="Open" />
                 </LinearLayout>
 
             </LinearLayout>

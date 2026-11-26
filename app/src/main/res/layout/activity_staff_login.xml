@@ -32,6 +32,7 @@
             android:layout_marginTop="8dp" />
 
         <TextView
+            android:id="@+id/txtLoginHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Staff Login"
@@ -41,6 +42,7 @@
             android:layout_marginTop="28dp" />
 
         <TextView
+            android:id="@+id/txtLoginSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign in using your authorized staff credentials."
@@ -69,7 +71,7 @@
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_secondary"
             android:singleLine="true"
-            android:inputType="text" />
+            android:inputType="textCapCharacters" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -108,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="New staff member? Register account"
+            android:text="Register account"
             android:textColor="@color/accent"
             android:textStyle="bold"
             android:textSize="13sp"
@@ -116,11 +118,24 @@
             android:layout_marginTop="16dp" />
 
         <TextView
+            android:id="@+id/btnRequestStaffAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Need an account? Submit request"
+            android:textColor="@color/accent"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/btnBackToHome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="← Back to Passenger Home"
+            android:text="&lt; Back to Passenger Home"
             android:textColor="@color/primary"
             android:textStyle="bold"
             android:singleLine="true"

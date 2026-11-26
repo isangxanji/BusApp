@@ -1,4 +1,4 @@
-package com.pabama.businfo.ui.viewmodel
+﻿package com.pabama.businfo.ui.viewmodel
 
 import androidx.lifecycle.*
 import com.pabama.businfo.data.entity.BusEntity
@@ -20,6 +20,7 @@ class MainViewModel(private val repository: BusRepository) : ViewModel() {
     val latestArrival: LiveData<MovementLogEntity?> = repository.latestArrival
     val allTrips: LiveData<List<TripEntity>> = repository.allTrips
     val completedTripsCount: LiveData<Int> = repository.completedTripsCount
+    val totalTripsCount: LiveData<Int> = repository.totalTripsCount
     val allStaff: LiveData<List<StaffEntity>> = repository.allStaff
     val staffCount: LiveData<Int> = repository.staffCount
     val totalMovementLogsCount: LiveData<Int> = repository.totalMovementLogsCount
@@ -191,16 +192,6 @@ class MainViewModel(private val repository: BusRepository) : ViewModel() {
     fun recordMovement(
         type: String,
         plate: String,
-        time: String,
-        notes: String?,
-        onDone: (Boolean) -> Unit = {}
-    ) {
-        recordMovement(type, plate, "", time, notes, onDone)
-    }
-
-    fun recordMovement(
-        type: String,
-        plate: String,
         terminal: String,
         time: String,
         notes: String?,
@@ -209,6 +200,23 @@ class MainViewModel(private val repository: BusRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 repository.recordMovement(type, plate, terminal, time, notes)
+                onDone(true)
+            } catch (e: Exception) {
+                onDone(false)
+            }
+        }
+    }
+
+    fun recordMovement(
+        type: String,
+        plate: String,
+        time: String,
+        notes: String?,
+        onDone: (Boolean) -> Unit = {}
+    ) {
+        viewModelScope.launch {
+            try {
+                repository.recordMovement(type, plate, "", time, notes)
                 onDone(true)
             } catch (e: Exception) {
                 onDone(false)

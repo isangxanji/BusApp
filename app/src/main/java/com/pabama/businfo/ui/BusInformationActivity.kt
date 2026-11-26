@@ -110,7 +110,7 @@ class BusInformationActivity : AppCompatActivity() {
             }
 
             val detailsText = TextView(this).apply {
-                text = "${bus.destination} • ${bus.busType}"
+                text = if (bus.destination.isNotBlank()) "${bus.destination} • ${bus.busType}" else bus.busType
                 textSize = 13f
                 setTextColor(getColor(R.color.text_secondary))
                 val p = LinearLayout.LayoutParams(
@@ -149,7 +149,7 @@ class BusInformationActivity : AppCompatActivity() {
 
                     text = when {
                         stops.size >= 2 ->
-                            "Route: ${stops.first()} → ${stops.last()}"
+                            "Route: ${stops.first()} to ${stops.last()}"
 
                         stops.size == 1 ->
                             "Route: ${stops.first()}"
@@ -168,7 +168,7 @@ class BusInformationActivity : AppCompatActivity() {
 
             // View details label
             val viewDetailsText = TextView(this).apply {
-                text = "View Bus Details →"
+                text = "View Bus Details >"
                 textSize = 12f
                 setTextColor(getColor(R.color.accent))
                 setTypeface(null, Typeface.BOLD)

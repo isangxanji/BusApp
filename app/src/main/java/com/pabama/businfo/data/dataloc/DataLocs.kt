@@ -15,7 +15,7 @@ interface BusDataLoc {
     @Query("SELECT * FROM buses WHERE plateNumber LIKE '%' || :query || '%' OR destination LIKE '%' || :query || '%' OR busType LIKE '%' || :query || '%' ORDER BY id ASC")
     fun searchBuses(query: String): LiveData<List<BusEntity>>
 
-    @Query("SELECT * FROM buses WHERE plateNumber = :plateNumber LIMIT 1")
+    @Query("SELECT * FROM buses WHERE UPPER(plateNumber) = UPPER(:plateNumber) LIMIT 1")
     fun getBusByPlate(plateNumber: String): BusEntity?
 
     @Query("SELECT * FROM buses WHERE id = :id LIMIT 1")
@@ -48,6 +48,9 @@ interface MovementLogDataLoc {
     @Query("SELECT * FROM movement_logs ORDER BY recordedAt DESC LIMIT :limit")
     fun getRecentLogs(limit: Int): LiveData<List<MovementLogEntity>>
 
+    @Query("SELECT * FROM movement_logs WHERE UPPER(busPlate) = UPPER(:busPlate) AND recordedAt = :recordedAt LIMIT 1")
+    fun getLogByPlateAndTime(busPlate: String, recordedAt: Long): MovementLogEntity?
+
     @Query("SELECT COUNT(*) FROM movement_logs")
     fun getTotalMovementLogsCount(): LiveData<Int>
 
@@ -66,14 +69,17 @@ interface MovementLogDataLoc {
 
 @Dao
 interface StaffDataLoc {
-    @Query("SELECT * FROM staff WHERE staffId = :staffId AND password = :password AND isActive = 1 LIMIT 1")
+    @Query("SELECT * FROM staff WHERE UPPER(staffId) = UPPER(:staffId) AND password = :password AND isActive = 1 LIMIT 1")
     fun authenticate(staffId: String, password: String): StaffEntity?
 
-    @Query("SELECT * FROM staff WHERE staffId = :staffId LIMIT 1")
+    @Query("SELECT * FROM staff WHERE UPPER(staffId) = UPPER(:staffId) LIMIT 1")
     fun getStaffById(staffId: String): StaffEntity?
 
     @Query("SELECT * FROM staff ORDER BY id ASC")
     fun getAllStaff(): LiveData<List<StaffEntity>>
+
+    @Query("SELECT * FROM staff ORDER BY id ASC")
+    fun getAllStaffSync(): List<StaffEntity>
 
     @Query("SELECT COUNT(*) FROM staff")
     fun getStaffCount(): LiveData<Int>
@@ -96,8 +102,14 @@ interface TripDataLoc {
     @Query("SELECT * FROM trips ORDER BY id ASC")
     fun getAllTripsSync(): List<TripEntity>
 
+    @Query("SELECT * FROM trips WHERE firebaseId = :firebaseId LIMIT 1")
+    fun getTripByFirebaseId(firebaseId: String): TripEntity?
+
     @Query("SELECT COUNT(*) FROM trips WHERE UPPER(status) = 'COMPLETED'")
     fun getCompletedTripsCount(): LiveData<Int>
+
+    @Query("SELECT COUNT(*) FROM trips")
+    fun getTotalTripsCount(): LiveData<Int>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTrip(trip: TripEntity): Long

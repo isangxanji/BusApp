@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="← Back to Dashboard"
+                android:text="&lt; Back to Dashboard"
                 android:textColor="@color/secondary"
                 android:textSize="14sp" />
 
@@ -52,7 +52,7 @@
                 android:gravity="center"
                 android:background="@color/primary"
                 android:text="+  Add New Trip Route"
-                android:textColor="@color/surface"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 

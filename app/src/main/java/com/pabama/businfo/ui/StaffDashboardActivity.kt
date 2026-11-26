@@ -225,7 +225,7 @@ class StaffDashboardActivity : AppCompatActivity() {
             }
 
             val detailsText = TextView(this).apply {
-                text = "${bus.destination} • ${bus.busType}"
+                text = if (bus.destination.isNotBlank()) "${bus.destination} • ${bus.busType}" else bus.busType
                 textSize = 13f
                 setTextColor(getColor(R.color.text_secondary))
                 val p = LinearLayout.LayoutParams(
@@ -264,7 +264,7 @@ class StaffDashboardActivity : AppCompatActivity() {
                 !stops.last().equals("Destination", ignoreCase = true)
             ) {
                 val routeText = TextView(this).apply {
-                    text = "Route: ${stops.first()} → ${stops.last()}"
+                    text = "Route: ${stops.first()} to ${stops.last()}"
                     textSize = 13f
                     setTextColor(getColor(R.color.text_secondary))
                     setPadding(0, 12, 0, 0)

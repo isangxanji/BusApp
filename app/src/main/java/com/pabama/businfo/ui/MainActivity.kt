@@ -95,14 +95,18 @@ class MainActivity : AppCompatActivity() {
 
                     "Staff Login" -> {
                         openInstantly(
-                            Intent(this, StaffLoginActivity::class.java)
+                            Intent(this, StaffLoginActivity::class.java).apply {
+                                putExtra("IS_ADMIN", false)
+                            }
                         )
                         true
                     }
 
                     "Admin Login" -> {
                         openInstantly(
-                            Intent(this, StaffLoginActivity::class.java)
+                            Intent(this, StaffLoginActivity::class.java).apply {
+                                putExtra("IS_ADMIN", true)
+                            }
                         )
                         true
                     }
@@ -189,7 +193,11 @@ class MainActivity : AppCompatActivity() {
                     firstAvailable.plateNumber
 
                 binding.txtMainBusDetails.text =
-                    "${firstAvailable.destination} • ${firstAvailable.busType}"
+                    if (firstAvailable.destination.isNotBlank()) {
+                        "${firstAvailable.destination} • ${firstAvailable.busType}"
+                    } else {
+                        firstAvailable.busType
+                    }
 
                 val stops = firstAvailable.routeDescription
                     .split("→", "->", "—")
@@ -201,7 +209,7 @@ class MainActivity : AppCompatActivity() {
                     !stops.last().equals("Destination", ignoreCase = true)
                 ) {
                     binding.txtMainBusRoute.text =
-                        "Route: ${stops.first()} → ${stops.last()}"
+                        "Route: ${stops.first()} to ${stops.last()}"
 
                     binding.txtMainBusRoute.visibility = View.VISIBLE
                 } else {
@@ -294,13 +302,15 @@ class MainActivity : AppCompatActivity() {
                 ?.takeIf { it.isNotBlank() }
                 ?: "Not specified"
 
+            val actualTerminal = latest.terminal.ifBlank { latest.originOrDestination }
+
             binding.txtRecentUpdateTitle.text =
                 latest.busPlate
 
             binding.txtRecentUpdateStatus.text = "ARRIVED"
 
             binding.txtRecentUpdateDesc.text =
-                latest.originOrDestination
+                actualTerminal
 
             binding.txtRecentUpdateDestination.text =
                 "To $destination"

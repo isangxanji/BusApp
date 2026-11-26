@@ -105,7 +105,7 @@ class ManageBusActivity : AppCompatActivity() {
             }
 
             val detailsText = TextView(this).apply {
-                text = "${bus.destination} • ${bus.busType}"
+                text = if (bus.destination.isNotBlank()) "${bus.destination} • ${bus.busType}" else bus.busType
                 textSize = 13f
                 setTextColor(getColor(R.color.text_secondary))
                 val p = LinearLayout.LayoutParams(
@@ -168,7 +168,7 @@ class ManageBusActivity : AppCompatActivity() {
 
                     text = when {
                         stops.size >= 2 ->
-                            "Route: ${stops.first()} → ${stops.last()}"
+                            "Route: ${stops.first()} to ${stops.last()}"
 
                         stops.size == 1 ->
                             "Route: ${stops.first()}"
@@ -198,12 +198,18 @@ class ManageBusActivity : AppCompatActivity() {
 
         val inputPlate = EditText(this).apply {
             hint = "Plate Number (e.g. KBA 1010)"
+            setTextColor(getColor(R.color.dialog_text))
+            setHintTextColor(getColor(R.color.dialog_hint))
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
             setSingleLine(true)
         }
 
         val inputType = EditText(this).apply {
             hint = "Bus Type (e.g. Regular Bus)"
             setText("Regular Bus")
+            setTextColor(getColor(R.color.dialog_text))
+            setHintTextColor(getColor(R.color.dialog_hint))
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS
             setSingleLine(true)
             val p = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -261,6 +267,7 @@ class ManageBusActivity : AppCompatActivity() {
         val inputPlate = EditText(this).apply {
             hint = "Plate Number"
             setText(bus.plateNumber)
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
             setSingleLine(true)
         }
         layout.addView(inputPlate)
@@ -268,6 +275,9 @@ class ManageBusActivity : AppCompatActivity() {
         val inputType = EditText(this).apply {
             hint = "Bus Type"
             setText(bus.busType)
+            setTextColor(getColor(R.color.dialog_text))
+            setHintTextColor(getColor(R.color.dialog_hint))
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS
             setSingleLine(true)
 
             layoutParams = LinearLayout.LayoutParams(
@@ -365,3 +375,4 @@ class ManageBusActivity : AppCompatActivity() {
             .show()
     }
 }
+

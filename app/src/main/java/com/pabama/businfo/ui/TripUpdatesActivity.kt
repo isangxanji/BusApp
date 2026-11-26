@@ -87,12 +87,15 @@ class TripUpdatesActivity : AppCompatActivity() {
 
     private fun showTerminalFilterDialog() {
 
-        val terminals = availableBuses
+        val routeTerminals = availableBuses
             .flatMap { bus ->
                 bus.routeDescription
                     .split("→", "->", "—")
                     .map { it.trim() }
             }
+        val logTerminals = allArrivalLogs
+            .map { it.terminal.ifBlank { it.originOrDestination }.trim() }
+        val terminals = (routeTerminals + logTerminals)
             .filter {
                 it.isNotBlank() &&
                         !it.equals("Terminal", ignoreCase = true) &&
@@ -299,7 +302,7 @@ class TripUpdatesActivity : AppCompatActivity() {
             }
 
             val routeText = TextView(this).apply {
-                text = log.originOrDestination
+                text = log.terminal.ifBlank { log.originOrDestination }
                 textSize = 13f
                 setTextColor(getColor(R.color.text_secondary))
                 val p = LinearLayout.LayoutParams(

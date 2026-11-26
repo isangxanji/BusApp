@@ -4,12 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.pabama.businfo.data.dataloc.*
 import com.pabama.businfo.data.entity.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Database(
     entities = [
@@ -18,7 +15,7 @@ import kotlinx.coroutines.launch
         StaffEntity::class,
         TripEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -40,7 +37,6 @@ abstract class AppDatabase : RoomDatabase() {
                     "pabama_bus_local.db"
                 )
                     .fallbackToDestructiveMigration()
-                    .addCallback(DatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
                 instance
@@ -49,38 +45,6 @@ abstract class AppDatabase : RoomDatabase() {
 
         suspend fun resetToDefaultData(database: AppDatabase) {
             database.clearAllTables()
-            populateInitialData(database)
-        }
-
-        suspend fun populateInitialData(database: AppDatabase) {
-            // Seed only the authorized accounts required for login and administrative CRUD
-            database.staffDataLoc().insertStaff(
-                StaffEntity(
-                    staffId = "STAFF001",
-                    password = "staff123",
-                    name = "Juan Dela Cruz"
-                )
-            )
-            database.staffDataLoc().insertStaff(
-                StaffEntity(
-                    staffId = "ADMIN001",
-                    password = "admin123",
-                    name = "Maria Santos"
-                )
-            )
-        }
-    }
-
-    private class DatabaseCallback(
-        private val scope: CoroutineScope
-    ) : RoomDatabase.Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            INSTANCE?.let { database ->
-                scope.launch(Dispatchers.IO) {
-                    populateInitialData(database)
-                }
-            }
         }
     }
 }

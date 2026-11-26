@@ -319,7 +319,7 @@ class RecordBusMovementActivity : AppCompatActivity() {
 
         binding.txtBusRoute.text =
             if (routeStops.isNotEmpty()) {
-                routeStops.joinToString(" → ")
+                routeStops.joinToString(" to ")
             } else {
                 "Route not specified"
             }
@@ -514,3 +514,4 @@ class RecordBusMovementActivity : AppCompatActivity() {
         NavigationHelper.setupStaffBottomNav(this, "RECORD")
     }
 }
+

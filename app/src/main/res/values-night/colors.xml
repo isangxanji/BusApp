@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Background & Surface for Night Mode -->
+    <color name="background">#0B1120</color>
+    <color name="surface">#1E293B</color>
+    <color name="card_inner">#0F172A</color>
+
+    <!-- Primary Blues for Night -->
+    <color name="primary">#3B82F6</color>
+    <color name="primary_dark">#60A5FA</color>
+    <color name="primary_light">#93C5FD</color>
+
+    <!-- Secondary & Accent Blues -->
+    <color name="secondary">#60A5FA</color>
+    <color name="secondary_dark">#3B82F6</color>
+    <color name="accent">#60A5FA</color>
+    <color name="accent_light">#1E293B</color>
+
+    <!-- Typography for Night Mode -->
+    <color name="text_primary">#F8FAFC</color>
+    <color name="text_secondary">#94A3B8</color>
+
+    <!-- Borders -->
+    <color name="border">#334155</color>
+    <color name="border_color">#1E3A8A</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Operational Status Colors for Night Mode -->
+    <color name="status_available">#22C55E</color>
+    <color name="status_en_route">#60A5FA</color>
+    <color name="status_completed">#38BDF8</color>
+    <color name="status_departed">#94A3B8</color>
+    <color name="status_unavailable">#EF4444</color>
+
+    <!-- Dialog Colors for Night Mode: Dark slate dialog with crisp white text -->
+    <color name="dialog_background">#1E293B</color>
+    <color name="dialog_text">#F8FAFC</color>
+    <color name="dialog_hint">#94A3B8</color>
+    <color name="dialog_action">#60A5FA</color>
+    <color name="dialog_delete">#F87171</color>
+</resources>

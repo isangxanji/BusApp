@@ -176,7 +176,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="See all →"
+                    android:text="See all &gt;"
                     android:id="@+id/btnSeeAllBuses"
                     android:singleLine="true"
                     android:textColor="@color/accent"
@@ -237,7 +237,7 @@
                     android:id="@+id/txtMainBusViewDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View Bus Details →"
+                    android:text="View Bus Details &gt;"
                     android:textColor="@color/accent"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -268,7 +268,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="See all →"
+                    android:text="See all &gt;"
                     android:id="@+id/btnSeeAllUpdates"
                     android:singleLine="true"
                     android:textColor="@color/accent"

@@ -16,7 +16,7 @@ object NavigationHelper {
         val btnAbout = activity.findViewById<TextView>(R.id.btnAbout) ?: return
 
         val inactiveColor = activity.getColor(R.color.text_secondary)
-        val activeColor = activity.getColor(R.color.accent)
+        val activeColor = activity.getColor(R.color.primary)
 
         // Reset all to inactive state first
         listOf(btnHome, btnBuses, btnUpdates, btnAbout).forEach { btn ->
@@ -97,7 +97,7 @@ object NavigationHelper {
         val btnTrips = activity.findViewById<TextView>(R.id.btnStaffTrips) ?: return
 
         val inactiveColor = activity.getColor(R.color.text_secondary)
-        val activeColor = activity.getColor(R.color.accent)
+        val activeColor = activity.getColor(R.color.primary)
 
         // Reset all buttons to inactive state first
         listOf(btnDashboard, btnRecord, btnBuses, btnTrips).forEach { btn ->
